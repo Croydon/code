@@ -84,8 +84,9 @@ set(SDL2_INCLUDE_DIRS
   ${SDL2_IMAGE_INCLUDE_DIRS}
   ${SDL2_MIXER_INCLUDE_DIRS} CACHE INTERNAL "")
 
+
 function(require_sdl targ)
-  message(STATUS "Configuring ${targ} with SDL")
+  message(STATUS "Configuring ${targ} with SDL (${SDL2_INCLUDE_DIRS})")
   if (";${ARGN};" MATCHES ";NOLINK;")
     set(NOLINK "NOLINK")
   endif()
@@ -99,7 +100,11 @@ function(require_sdl targ)
       add_definitions(-mwindows) # This is GUI!
     endif()
   elseif(OS_POSIX)
-    target_link_libs(${targ} dl rt ${NOLINK})
+    target_link_libs(${targ} dl ${NOLINK})
+	
+    if (UNIX AND NOT APPLE)
+      target_link_libs(${targ} rt ${NOLINK})
+    endif()
   endif()
 
   require_opengl(${targ} ${NOLINK})
@@ -146,7 +151,7 @@ find_path(ENET_INCLUDE_DIRS enet/enet.h)
 register_possible_dependency(${ENET_LIBS})
 
 function(require_enet targ)
-  message(STATUS "Configuring ${targ} with ENET")
+  message(STATUS "Configuring ${targ} with ENet")
   if (";${ARGN};" MATCHES ";NOLINK;")
     set(NOLINK "NOLINK")
   endif()
