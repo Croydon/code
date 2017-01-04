@@ -2,20 +2,9 @@
 #
 # Structure
 # * Utility functions
-# * Installation target implementations
-# * Nightly build/APIDOC uploading
 # * Compiling and testing
-# * Targets as called by .travis.yml
 # * Main routine
 
-# ATTENTION:
-# Please USE the following naming format for any files uploaded to our distribution server (nightly.inexor.org):
-# ...-BUILDNUMBER-<PACKAGENAME>.EXTENSION
-# where <PACKAGENAME> is NOT CONTAINING any -
-# correct: master-oldbranch-olddirty-1043.2-linux_gcc.txt
-# correct: ...-992.2-apidoc.hip
-# wrong: ...-1043.2-linux-gcc.zip
-# wrong: ...-linux_gcc-1043.2.zip
 
 ## UTILITY FUNCTIONS #######################################
 
@@ -64,164 +53,6 @@ external_pull_request() {
   fi
 }
 
-# upload remote_path local_path [local_paths]...
-#
-# Upload one or more files to nightly.inexor.org
-upload() {
-  # Fix an issue where upload directory gets specified by subsequent upload() calls
-  ncftpput -R -v -u "$FTP_USER" -p "$FTP_PASSWORD" inexor.org / "$@" || true
-}
-
-## INSTALLATION ROUTINES ###################################
-
-install_wily_repo() {
-  echo -e "\ndeb http://archive.ubuntu.com/ubuntu wily "{main,multiverse,universe,restricted} >> /etc/apt/sources.list
-}
-
-install_tool() {
-  apt-get -y -t trusty install ncftp
-}
-
-install_linux() {
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FB1BF5BF09FA0AB7
-  
-  add-apt-repository -y "deb http://ppa.launchpad.net/zoogie/sdl2-snapshots/ubuntu trusty main"
-  install_wily_repo
-  apt-get update
-  
-
-  install_tool
-
-  apt-get -y -t wily install --only-upgrade libfontconfig1
-  apt-get -y -t wily install build-essential binutils doxygen nasm
-  python -m pip install conan
-}
-
-# Install routines for each target
-
-install_win64() {
-  install_wily_repo
-  apt-get update
-  install_tool
-  apt-get -y -t wily install mingw-w64
-}
-install_win32() {
-  install_win64
-}
-install_linux_clang() {
-  install_linux
-  apt-get -y -t wily install clang-3.7 binutils
-}
-install_linux_gcc() {
-  install_linux
-  apt-get -y -t wily install gcc-5 g++-5
-}
-install_apidoc() {
-  apt-get update
-  install_tool
-  apt-get install -y -t trusty doxygen
-}
-install_osx() {
-  # if you need sudo for some stuff here, you need to adjust travis.yml and target_before_install()
-  #brew install sdl2
-  exit 0
-}
-
-## UPLOADING NIGHTLY BUILDS AND THE APIDOC #################
-
-upload_apidoc() {
-  (
-    local zipp="/tmp/$build"
-    cd "$gitroot" -v
-    doxygen doxygen.conf 2>&1 | grep -vF 'sqlite3_step " \
-      "failed: memberdef.id_file may not be NULL'
-    mv doc "$zipp"
-    zip -r "${zipp}.zip" "$zipp"
-    upload "$zipp.zip"
-  )
-}
-
-nigthly_build() {
-  local outd="/tmp/${build}.d/"
-  local zipf="/tmp/${build}.zip"
-  local descf="/tmp/${build}.txt"
-
-  # Include the media files
-  local media="${media}"
-  test -n "${media}" || test "$branch" = master && media=true
-
-  echo "
-  ---------------------------------------
-    Exporting Nightly build
-
-    commit: ${commit}
-    branch: ${branch}
-    job:    ${jobno}
-    build:  ${build}
-
-    gitroot: ${gitroot}
-    zip: ${zipf}
-    dir: ${outd}
-
-    data export: $media
-  "
-
-  mkdir "$outd"
-
-  if test "$media" = true; then (
-    cd "$gitroot"
-    curl -LOk https://github.com/inexor-game/data/archive/master.zip
-    unzip "master.zip" -d "$outd"
-    rm "master.zip"
-    cd "$outd"
-    mv "data-master" "media/data"
-  ) fi
-
-  local ignore="$(<<< '
-    .
-    ..
-    .gitignore
-    build
-    cmake
-    CMakeLists.txt
-    appveyor.yml
-    doxygen.conf
-    .git
-    .gitignore
-    .gitmodules
-    inexor
-    platform
-    tool
-    vendor
-    .travis.yml
-  ' tr -d " " | grep -v '^\s*$')"
-
-  (
-    cd "$gitroot"
-    ls -a | grep -Fivx "$ignore" | xargs -t cp -rvt "$outd"
-  )
-
-  (
-    cd "`dirname "$outd"`"
-    zip -r "$zipf" "`basename $outd`"
-  )
-
-  (
-    echo "Commit: ${commit}"
-    echo -n "SHA 512: "
-    sha512sum "$zipf"
-  ) > "$descf"
-
-  upload "$zipf" "$descf"
-
-  if test "$branch" = master; then (
-    ln -s "$zipf" "master-latest-$TARGET.zip"
-    ln -s "$descf" "master-latest-$TARGET.txt"
-    upload "master-latest-$TARGET.zip" "master-latest-$TARGET.txt"
-  ) fi
-  
-  return 0
-}
 
 # ACTUALLY COMPILING AND TESTING INEXOR ####################
 
@@ -238,9 +69,6 @@ build() {
 run_tests() {
   if contains "$TARGET" linux; then
     "${bin}/unit_tests"
-  elif contains "$TARGET" win; then
-    echo >&2 "Sorry, win is not supported for testing yet."
-    exit 0
   else
     echo >&2 "ERROR: UNKNOWN TRAVIS TARGET: ${TARGET}"
     exit 23
@@ -249,10 +77,6 @@ run_tests() {
 
 ## TARGETS CALLED BY TRAVIS ################################
 
-target_before_install() {
-  sudo "$script" install_"$TARGET"
-  exit 0
-}
 
 target_script() {
   if test "$TARGET" = apidoc; then
@@ -274,12 +98,15 @@ target_after_success() {
 
 ## MAIN ####################################################
 
+# this makes the entire script fail if one commands fail
 set -e
 
 script="$0"
 tool="`dirname "$0"`"
 code="${tool}/.."
 bin="${code}/bin"
+TARGET="$3"
+CMAKE_FLAGS="$4"
 
 export main_repo="inexor-game/code"
 export branch="$TRAVIS_BRANCH" # The branch we're on
@@ -287,12 +114,22 @@ export jobno="$TRAVIS_JOB_NUMBER" # The job number
 export commit="${TRAVIS_COMMIT}"
 # Name of this build
 export build="$(echo "${branch}-${jobno}" | sed 's#/#-#g')-${TARGET}"
-export gitroot="$TRAVIS_BUILD_DIR"
+#export gitroot="$TRAVIS_BUILD_DIR"
+
+if [ -z "$2" ]; then
+  export gitroot="/inexor"
+else
+  # this makes it possible to run this script successfull
+  # even if doesn't get called from the root directory
+  # of THIS repository
+  # required to make inexor-game/ci-prebuilds working
+  export gitroot="/inexor/$2"
+fi
 
 self_pull_request && {
   echo >&2 -e "Skipping build, because this is a pull " \
     "request with a branch in the main repo.\n"         \
-    "This means, there should already be a ci job for " \
+    "This means, there should already be a CI job for " \
     "this branch. No need to do things twice."
   exit 0
 }

@@ -1,40 +1,62 @@
-language: c++
 sudo: required
 dist: trusty
+language: cpp
 
-env:
-  global:
-    - secure: UUtdYLhd9+cY+bMrcRvvtjmsQBqM5L9zgzyLeQZLMmmWbHwLsfpQask9A8eD1oc1K1o0tYmK+Qk1flxNTbnUtlryPNgJxJ95a/TwLl1P9yN6plMleNbuwMs5dyS9VnmcK3LzDFuoje/9rtX2seNR2PW2EJSvPz20ENaT693Kfa8=
-    - secure: G8rRE17KDx83crRLQSEkIyvMbXlbpKDvIYoKE+y9Bg3qu79tsB/RrNdo6OGHx4x3KhBGpuo4NdN/4FAGS599P4W+KN3kNr9VFSCMJhJK59+KkYfGq2rX1oGDhB4B1xjVk0tj6bFIJ333hVLEYFviIKYxRSZfnKa0RmgBJZbvMfs=
+services: 
+  - docker
+  
+git:
+  depth: 20
 
 matrix:
   include:
     - os: linux
-      sudo: required
-      dist: trusty
-      language: cpp
       compiler: clang
-      env: TARGET=linux_clang CONAN_COMPILER='clang' CONAN_COMPILER_VERSION='3.5'
+      env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9"
 
     - os: linux
-      sudo: required
-      dist: trusty
-      language: cpp
       compiler: gcc
-      env: TARGET=linux_gcc CONAN_COMPILER='gcc' CONAN_COMPILER_VERSION='5.2'
-
-    - os: linux
-      sudo: required
-      dist: trusty
-      env: TARGET=apidoc
-      git:
-        submodules: false
+      env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6"
+      
+  #- os: osx
+      #sudo: false
+      #osx_image: xcode8
+      #compiler: clang
+      #env: TARGET="osx" CMAKE_FLAGS="-DCMAKE_CXX_COMPILER=clang++-3.8 -DCMAKE_C_COMPILER=clang-3.8"
+  #allow_failures:
+    #- os: osx
+      #sudo: false
+      #osx_image: xcode8
+      #compiler: clang
+      #env: os=linux compiler=clang TARGET="osx" CMAKE_FLAGS="-DCMAKE_CXX_COMPILER=clang++-3.9 -DCMAKE_C_COMPILER=clang-3.9 -DBUILD_ALL=1"
+      
+  #fast_finish: true # don't wait for allow_failures (OSX) to fail, gives faster respons
+  
+    #- os: linux
+      #sudo: required
+      #dist: trusty
+      #env: TARGET=apidoc
+      #git:
+        #submodules: false
 
 before_install:
-  - bash tool/travis.sh target_before_install
+  # Get our CI Docker image
+  - if [ ${os} == 'linux' ]; then 
+    sudo docker pull inexorgame/ci-docker':'${docker_tag} ;
+    fi
 
 script:
-  - bash tool/travis.sh target_script
+  - if [ ${os} == 'linux' ]; then 
+    sudo docker run -v $(pwd)':'/inexor --net=host -it inexorgame/ci-docker':'${docker_tag} /inexor/tool/travis.sh target_script / ${TARGET} ${CMAKE_FLAGS};
+    fi
+  - if [ ${os} == 'osx' ]; then 
+    bash tool/travis.sh target_before_install; 
+    fi
 
 after_success:
-  - bash tool/travis.sh target_after_success
+ - cd bin
+ - ls -ld $(find .)
+ - apt-get update
+ - apt-get install -y ncftp
+ - bash tool/travis_create_nightly.sh
+ #- bash tool/travis.sh target_after_success
