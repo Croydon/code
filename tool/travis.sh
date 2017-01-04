@@ -106,7 +106,9 @@ tool="`dirname "$0"`"
 code="${tool}/.."
 bin="${code}/bin"
 TARGET="$3"
-CMAKE_FLAGS="$4"
+#CMAKE_FLAGS="$4"
+CONAN_COMPILER="$4"
+CONAN_COMPILER_VERSION="$5"
 
 export main_repo="inexor-game/code"
 export branch="$TRAVIS_BRANCH" # The branch we're on

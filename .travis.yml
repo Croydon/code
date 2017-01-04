@@ -47,8 +47,7 @@ before_install:
 
 script:
   - if [ ${os} == 'linux' ]; then 
-    sudo docker run -v $(pwd)':'/inexor --net=host -it inexorgame/ci-docker':'${docker_tag} /inexor/tool/travis.sh target_script / ${TARGET};
-    # ${CMAKE_FLAGS}
+    sudo docker run -v $(pwd)':'/inexor --net=host -it inexorgame/ci-docker':'${docker_tag} /inexor/tool/travis.sh target_script / ${TARGET} ${CONAN_COMPILER} ${CONAN_COMPILER_VERSION};
     fi
   - if [ ${os} == 'osx' ]; then 
     bash tool/travis.sh target_before_install; 
