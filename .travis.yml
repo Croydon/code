@@ -12,7 +12,7 @@ matrix:
   include:
     - os: linux
       compiler: clang
-      env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9"
+      env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.5"
 
     - os: linux
       compiler: gcc
@@ -56,7 +56,5 @@ script:
 after_success:
  - cd bin
  - ls -ld $(find .)
- - apt-get update
- - apt-get install -y ncftp
  - bash tool/travis_create_nightly.sh
  #- bash tool/travis.sh target_after_success
