@@ -54,7 +54,5 @@ script:
     fi
 
 after_success:
- - cd bin
- - ls -ld $(find .)
  - bash tool/travis_create_nightly.sh
  #- bash tool/travis.sh target_after_success
