@@ -52,7 +52,3 @@ script:
   - if [ ${os} == 'osx' ]; then 
     bash tool/travis.sh target_before_install; 
     fi
-
-after_success:
- - bash tool/travis_create_nightly.sh
- #- bash tool/travis.sh target_after_success
