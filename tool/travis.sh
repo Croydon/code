@@ -151,7 +151,9 @@ nigthly_build() {
     Jenkinsfile
     appveyor.yml
     conanfile.py
+    conanfile.pyc
     dependencies.py
+    dependencies.pyc
     doxygen.conf
     .git
     .gitignore
@@ -169,8 +171,8 @@ nigthly_build() {
   )
 
   (
+    zip -r -dd -q "$zipf" "`basename $outd`" 
     cd "`dirname "$outd"`"
-    zip -r "$zipf" "`basename $outd`" 
   )
 
   (
