@@ -114,7 +114,7 @@ nigthly_build() {
 
   # Include the media files
   local media="${media}"
-  test -n "${media}" || test "$branch" = master && media=true
+  test -n "${media}" || test "$branch" = master && media=false
 
   echo "
   ---------------------------------------
@@ -198,7 +198,7 @@ nigthly_build() {
 target_after_success() {
   if test "$TARGET" != apidoc; then
     #external_pull_request || nigthly_build || true
-    nightly_build
+    nigthly_build
   fi
   exit 0
 }
@@ -238,8 +238,7 @@ export commit="${TRAVIS_COMMIT}"
 export build="$(echo "${branch}-${jobno}" | sed 's#/#-#g')-${TARGET}"
 #export gitroot="$TRAVIS_BUILD_DIR"
 
-echo "test: -e CC=$CC -e CXX=$CXX"
-    
+  
 if [ -z "$2" ]; then
   export gitroot="/inexor"
 else
