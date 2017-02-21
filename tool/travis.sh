@@ -146,25 +146,27 @@ nigthly_build() {
   local ignore="$(<<< '
     .
     ..
-    .gitignore
     build
     cmake
     CMakeLists.txt
+    Jenkinsfile
     appveyor.yml
+    conanfile.py
+    dependencies.py
     doxygen.conf
     .git
     .gitignore
     .gitmodules
     inexor
-    platform
+    inexor.bat
+    server.bat
     tool
-    vendor
     .travis.yml
   ' tr -d " " | grep -v '^\s*$')"
 
   (
     cd "$gitroot"
-    ls -a | grep -Fivx "$ignore" | xargs -t cp -rvt "$outd"
+    ls -a | grep -Fivx "$ignore" | xargs -t cp -rt "$outd"
   )
 
   (
