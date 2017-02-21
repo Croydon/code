@@ -166,7 +166,7 @@ nigthly_build() {
 
   (
     cd "$gitroot"
-    ls -a | grep -Fivx "$ignore" | xargs -t cp -rt "$outd"
+    ls -a | grep -Fivx "$ignore" | xargs -t cp -rt "$outd" 1>/dev/null 
   )
 
   (
