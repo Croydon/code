@@ -227,6 +227,8 @@ TARGET="$3"
 #CMAKE_FLAGS="$4"
 CONAN_COMPILER="$4"
 CONAN_COMPILER_VERSION="$5"
+export CC="$6"
+export CXX="$7"
 
 export main_repo="inexor-game/code"
 export branch="$TRAVIS_BRANCH" # The branch we're on
