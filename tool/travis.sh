@@ -236,6 +236,8 @@ export commit="${TRAVIS_COMMIT}"
 export build="$(echo "${branch}-${jobno}" | sed 's#/#-#g')-${TARGET}"
 #export gitroot="$TRAVIS_BUILD_DIR"
 
+echo "test: -e CC=$CC -e CXX=$CXX"
+    
 if [ -z "$2" ]; then
   export gitroot="/inexor"
 else
