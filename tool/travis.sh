@@ -134,14 +134,14 @@ nigthly_build() {
 
   mkdir "$outd"
 
-  if test "$media" = true; then (
-    cd "$gitroot"
-    curl -LOk https://github.com/inexor-game/data/archive/master.zip
-    unzip "master.zip" -d "$outd"
-    rm "master.zip"
-    cd "$outd"
-    mv "data-master" "media/data"
-  ) fi
+  #if test "$media" = true; then (
+    #cd "$gitroot"
+    #curl -LOk https://github.com/inexor-game/data/archive/master.zip
+    #unzip "master.zip" -d "$outd" 2>/dev/null 
+    #rm "master.zip"
+    #cd "$outd"
+    #mv "data-master" "media/data"
+  #) fi
 
   local ignore="$(<<< '
     .
@@ -171,7 +171,7 @@ nigthly_build() {
 
   (
     cd "`dirname "$outd"`"
-    zip -r "$zipf" "`basename $outd`"
+    zip -r "$zipf" "`basename $outd`" 1>/dev/null 
   )
 
   (
@@ -232,7 +232,7 @@ export CXX="$7"
 
 export commit="$8"
 export branch="$9" # The branch we're on
-export jobno="$10" # The job number
+export jobno="${10}" # The job number
 
 # Name of this build
 export build="$(echo "${branch}-${jobno}" | sed 's#/#-#g')-${TARGET}"
