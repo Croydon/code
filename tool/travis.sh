@@ -171,8 +171,8 @@ nigthly_build() {
   )
 
   (
-    zip -r -dd -q "$zipf" "`basename $outd`" 
     cd "`dirname "$outd"`"
+    zip -r -dd -q "$zipf" "`basename $outd`" 
   )
 
   (
