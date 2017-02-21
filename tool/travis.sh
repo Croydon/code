@@ -230,15 +230,16 @@ CONAN_COMPILER_VERSION="$5"
 export CC="$6"
 export CXX="$7"
 
-export main_repo="inexor-game/code"
-export branch="$TRAVIS_BRANCH" # The branch we're on
-export jobno="$TRAVIS_JOB_NUMBER" # The job number
-export commit="${TRAVIS_COMMIT}"
+export commit="$8"
+export branch="$9" # The branch we're on
+export jobno="$10" # The job number
+
 # Name of this build
 export build="$(echo "${branch}-${jobno}" | sed 's#/#-#g')-${TARGET}"
-#export gitroot="$TRAVIS_BUILD_DIR"
 
-  
+export main_repo="inexor-game/code"
+
+
 if [ -z "$2" ]; then
   export gitroot="/inexor"
 else
