@@ -60,7 +60,7 @@ build() {
   (
     mkcd "/tmp/inexor-build-${build}"
     #conan
-    echo "executed conan install "$gitroot" --scope build_all=1 --build=missing -s compiler=$CONAN_COMPILER -s compiler.version=$CONAN_COMPILER_VERSION -s compiler.libcxx=libstdc++11"
+    echo "executed conan install "$gitroot" --scope build_all=1 --build=missing -s compiler=$CONAN_COMPILER -s compiler.version=$CONAN_COMPILER_VERSION -s compiler.libcxx=libstdc++11 -e CC=$CC -e CXX=$CXX"
     conan install "$gitroot" --scope build_all=1 --build=missing -s compiler="$CONAN_COMPILER" -s compiler.version="$CONAN_COMPILER_VERSION" -s compiler.libcxx="libstdc++11" -e CC="$CC" -e CXX="$CXX"
     conan build "$gitroot"
   )
@@ -197,7 +197,8 @@ nigthly_build() {
 # Upload nightly
 target_after_success() {
   if test "$TARGET" != apidoc; then
-    external_pull_request || nigthly_build || true
+    #external_pull_request || nigthly_build || true
+    nightly_build
   fi
   exit 0
 }
