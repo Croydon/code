@@ -12,11 +12,11 @@ matrix:
   include:
     - os: linux
       compiler: clang
-      env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9"
+      env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9" CMAKE_CC="clang-3.9" CMAKE_CXX="clang++-3.9"
 
     - os: linux
       compiler: gcc
-      env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3"
+      env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" CMAKE_CC="gcc" CMAKE_CXX="g++"
       
   #- os: osx
       #sudo: false
@@ -47,7 +47,7 @@ before_install:
 
 script:
   - if [ ${os} == 'linux' ]; then 
-    sudo docker run -v $(pwd)':'/inexor --net=host -it inexorgame/ci-docker':'${docker_tag} /inexor/tool/travis.sh target_script / ${TARGET} ${CONAN_COMPILER} ${CONAN_COMPILER_VERSION} ${CC} ${CXX};
+    sudo docker run -v $(pwd)':'/inexor --net=host -it inexorgame/ci-docker':'${docker_tag} /inexor/tool/travis.sh target_script / ${TARGET} ${CONAN_COMPILER} ${CONAN_COMPILER_VERSION} ${CMAKE_CC} {$CMAKE_CXX};
     fi
   - if [ ${os} == 'osx' ]; then 
     bash tool/travis.sh target_before_install; 
