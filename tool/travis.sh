@@ -170,7 +170,7 @@ nigthly_build() {
 
   (
     cd "`dirname "$outd"`"
-    zip -r "$zipf" "`basename $outd`" 1>/dev/null 
+    zip -r "$zipf" "`basename $outd`" 
   )
 
   (
