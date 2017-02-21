@@ -59,7 +59,6 @@ external_pull_request() {
 build() {
   (
     mkcd "/tmp/inexor-build-${build}"
-    #conan
     echo "executed conan install "$gitroot" --scope build_all=1 --build=missing -s compiler=$CONAN_COMPILER -s compiler.version=$CONAN_COMPILER_VERSION -s compiler.libcxx=libstdc++11 -e CC=$CC -e CXX=$CXX"
     conan install "$gitroot" --scope build_all=1 --build=missing -s compiler="$CONAN_COMPILER" -s compiler.version="$CONAN_COMPILER_VERSION" -s compiler.libcxx="libstdc++11" -e CC="$CC" -e CXX="$CXX"
     conan build "$gitroot"
@@ -166,7 +165,7 @@ nigthly_build() {
 
   (
     cd "$gitroot"
-    ls -a | grep -Fivx "$ignore" | xargs -t cp -rt "$outd" 1>/dev/null 
+    ls -a | grep -Fivx "$ignore" | xargs -t cp -rt "$outd" 
   )
 
   (
