@@ -12,7 +12,7 @@ matrix:
   include:
     - os: linux
       compiler: clang
-      env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.5"
+      env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9"
 
     - os: linux
       compiler: gcc
