@@ -184,8 +184,7 @@ nigthly_build() {
   upload "$zipf" "$descf"
 
   if test "$branch" = master; then (
-    ln -s "$zipf" "master-latest-$TARGET.zip"
-    ln -s "$descf" "master-latest-$TARGET.txt"
+    echo "${build}" > "master-latest-$TARGET.txt"
     upload "master-latest-$TARGET.zip" "master-latest-$TARGET.txt"
   ) fi
   
@@ -199,7 +198,9 @@ nigthly_build() {
 target_after_success() {
   if test "$TARGET" != apidoc; then
     #external_pull_request || nigthly_build || true
-    nigthly_build
+    if test "$NIGHTLY" = true; then
+        nigthly_build
+    fi
   fi
   exit 0
 }
@@ -234,9 +235,10 @@ export CXX="$7"
 export commit="$8"
 export branch="$9" # The branch we're on
 export jobno="${10}" # The job number
-FTP_DOMAIN="${11}"
-FTP_USER="${12}"
-FTP_PASSWORD="${13}"
+NIGHTLY="${11}"
+FTP_DOMAIN="${12}"
+FTP_USER="${13}"
+FTP_PASSWORD="${14}"
 
 
 # Name of this build

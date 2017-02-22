@@ -12,11 +12,11 @@ matrix:
   include:
     - os: linux
       compiler: clang
-      env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9" CMAKE_CC="clang-3.9" CMAKE_CXX="clang++-3.9"
+      env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9" CMAKE_CC="clang-3.9" CMAKE_CXX="clang++-3.9" NIGHTLY="true"
 
     - os: linux
       compiler: gcc
-      env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" CMAKE_CC="gcc" CMAKE_CXX="g++"
+      env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" CMAKE_CC="gcc" CMAKE_CXX="g++" NIGHTLY="true"
       
   #- os: osx
       #sudo: false
@@ -46,8 +46,11 @@ before_install:
     fi
     
 script:
+  - if [ ${GLOBAL_NIGHTLY} != 'true' ]; then
+    NIGHTLY="false"
+    fi
   - if [ ${os} == 'linux' ]; then 
-    sudo docker run -v $(pwd)':'/inexor --net=host -it inexorgame/ci-docker':'${docker_tag} /inexor/tool/travis.sh target_script / ${TARGET} ${CONAN_COMPILER} ${CONAN_COMPILER_VERSION} ${CMAKE_CC} ${CMAKE_CXX} ${TRAVIS_COMMIT} ${TRAVIS_BRANCH} ${TRAVIS_JOB_NUMBER} ${FTP_DOMAIN} ${FTP_USER} ${FTP_PASSWORD};
+    sudo docker run -v $(pwd)':'/inexor --net=host -it inexorgame/ci-docker':'${docker_tag} /inexor/tool/travis.sh target_script / ${TARGET} ${CONAN_COMPILER} ${CONAN_COMPILER_VERSION} ${CMAKE_CC} ${CMAKE_CXX} ${TRAVIS_COMMIT} ${TRAVIS_BRANCH} ${TRAVIS_JOB_NUMBER} ${NIGHTLY}  ${FTP_DOMAIN} ${FTP_USER} ${FTP_PASSWORD};
     fi
   - if [ ${os} == 'osx' ]; then 
     bash tool/travis.sh target_before_install; 
