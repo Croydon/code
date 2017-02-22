@@ -155,11 +155,13 @@ nigthly_build() {
     dependencies.py
     dependencies.pyc
     doxygen.conf
+    flex/.git
     .git
     .gitignore
     .gitmodules
     inexor
     inexor.bat
+    media/core/.git
     server.bat
     tool
     .travis.yml
