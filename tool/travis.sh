@@ -91,7 +91,7 @@ run_tests() {
 # Variables are defined on the Travis website
 upload() {
   # Fix an issue where upload directory gets specified by subsequent upload() calls
-  ncftpput -R -v -u "$FTP_USER" -p "$FTP_PASSWORD" "$FTP_DOMAIN" / "$@"
+  ncftpput -R -v -u "$NIGHTLY_USER" -p "$NIGHTLY_PASSWORD" "$FTP_DOMAIN" / "$@"
 }
 
 upload_apidoc() {
@@ -206,7 +206,7 @@ target_after_success() {
     fi
     if test "$NIGHTLY" = conan; then
         # Upload all conan packages to conan.io
-        conan user --password "$CONAN_PASSWORD" "$CONAN_USER"
+        conan user --password "$NIGHTLY_PASSWORD" "$NIGHTLY_USER"
         conan upload --all --confirm *
     fi
   fi
@@ -243,10 +243,11 @@ export CXX="$7"
 export commit="$8"
 export branch="$9" # The branch we're on
 export jobno="${10}" # The job number
+# Nightly is either true, false or conan
 NIGHTLY="${11}"
-FTP_DOMAIN="${12}"
-FTP_USER="${13}"
-FTP_PASSWORD="${14}"
+NIGHTLY_USER="${12}"
+NIGHTLY_PASSWORD="${13}"
+FTP_DOMAIN="${14}"
 
 
 # Name of this build
