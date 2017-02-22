@@ -234,6 +234,10 @@ export CXX="$7"
 export commit="$8"
 export branch="$9" # The branch we're on
 export jobno="${10}" # The job number
+FTP_DOMAIN="${11}"
+FTP_USER="${12}"
+FTP_PASSWORD="${13}"
+
 
 # Name of this build
 export build="$(echo "${branch}-${jobno}" | sed 's#/#-#g')-${TARGET}"
