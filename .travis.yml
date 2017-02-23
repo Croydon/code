@@ -16,7 +16,7 @@ matrix:
 
     - os: linux
       compiler: gcc
-      env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.2" CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" NIGHTLY="true"
+      env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" NIGHTLY="true"
       
   #- os: osx
       #sudo: false
