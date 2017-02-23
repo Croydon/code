@@ -207,7 +207,7 @@ target_after_success() {
     if test "$NIGHTLY" = conan; then
         # Upload all conan packages to conan.io
         conan user --password "${NIGHTLY_PASSWORD}" "${NIGHTLY_USER}"
-        conan upload --all --confirm '*${NIGHTLY_USER}*'
+        conan upload --all --confirm "${NIGHTLY_USER}"
     fi
   fi
   exit 0
