@@ -8,7 +8,7 @@ requires = (("Kainjow_Mustache/2.0@inexorgame/stable"),
             ("spdlog/0.10.0@memsharded/stable"),
             ("SDL2/2.0.5@lasote/stable"),
             ("SDL2_image/2.0.1@lasote/stable"),
-            ("CEF/3.2704.1424.gc3f0a5b@a_teammate/testing"),
+            ("CEF/3.2704.1424.gc3f0a5b@Croydon/testing"),
             ("Protobuf/3.1.0@inexorgame/stable"),
             ("gRPC/1.1.0-dev@inexorgame/stable"))
 
