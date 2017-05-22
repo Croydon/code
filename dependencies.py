@@ -1,6 +1,6 @@
 requires = (("Kainjow_Mustache/2.0@inexorgame/stable"),
             ("pugixml/1.7@inexorgame/testing"),
-            ("Boost/1.60.0@lasote/stable"), # These are requirements of gluegen
+            ("Boost/1.64.0@inexorgame/stable"), # These are requirements of gluegen
             ("RapidJSON/1.0.2@inexorgame/stable"),
             ("zlib/1.2.8@lasote/stable"),
             ("gtest/1.7.0@lasote/stable"),
