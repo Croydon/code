@@ -40,8 +40,10 @@ git config user.email ${GITHUB_BOT_EMAIL}
 # Update submodule
 echo "Update submodule in ci-prebuilds"
 cd inexor
-git pull
-git checkout master
+# TODO: change to master
+git pull origin rebased2
+# TODO: change to master
+git checkout rebased2
 cd ../
 
 echo "Create a commit"

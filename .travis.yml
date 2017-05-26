@@ -53,6 +53,7 @@ before_install:
 
 script:
   - if [ "${conan_prebuilds}" == "true" ]; then
+      set -e ;
       bash ./tool/travis_conditional_conan_package_generating.sh ;
     else
       echo "${conan_prebuilds}" ;
