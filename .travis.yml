@@ -10,14 +10,13 @@ git:
 
 jobs:
   include:
-    - stage: ConanCheck
+    - stage: Conan
       os: linux
-      compiler: conan
+      env: docker_tag="NODOCKER"
     - stage: building
       os: linux
       compiler: clang
       env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9" CMAKE_CC="clang-3.9" CMAKE_CXX="clang++-3.9" NIGHTLY="true"
-
     - os: linux
       compiler: gcc
       env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" NIGHTLY="true"
@@ -45,16 +44,12 @@ jobs:
 
 before_install:
   # Get our CI Docker image
-  - if [[ "${os}" == 'linux' ]]; then
-      if [[ "${compiler}" == 'conan' ]]; then
-        echo "" ;
-      else
+  - if ! [[ "${docker_tag}" == 'NODOCKER' ]]; then
         sudo docker pull inexorgame/ci-docker':'${docker_tag} ;
-      fi
     fi
 
 script:
-  - if [ "${compiler}" == "conan" ]; then
+  - if [ "${stage}" == "Conan" ]; then
       bash ./tool/travis_conditional_conan_package_generating.sh ;
     fi
   - if [ "${GLOBAL_NIGHTLY}" == "false" ]; then
@@ -67,7 +62,7 @@ script:
       NIGHTLY_USER="${FTP_USER}";
       NIGHTLY_PASSWORD="${FTP_PASSWORD}";
     fi
-  - if [ "${os}" == "linux" ]; then
+  - if ! [[ "${docker_tag}" == "NODOCKER" ]]; then
     sudo docker run -v $(pwd)':'/inexor --net=host -it inexorgame/ci-docker':'${docker_tag} /inexor/tool/travis.sh target_script / ${TARGET} ${CONAN_COMPILER} ${CONAN_COMPILER_VERSION} ${CMAKE_CC} ${CMAKE_CXX} ${TRAVIS_COMMIT} ${TRAVIS_BRANCH} ${TRAVIS_JOB_NUMBER} ${NIGHTLY} ${NIGHTLY_USER} ${NIGHTLY_PASSWORD} ${FTP_DOMAIN};
     fi
   - if [ "${os}" == "osx" ]; then
