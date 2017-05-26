@@ -52,7 +52,7 @@ script:
   - if [ "${stage}" == "Conan" ]; then
       bash ./tool/travis_conditional_conan_package_generating.sh ;
     else
-      echo fail ;
+      echo "${stage}" ;
     fi
   - if [ "${GLOBAL_NIGHTLY}" == "false" ]; then
       NIGHTLY="false";
