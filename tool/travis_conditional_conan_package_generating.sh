@@ -65,7 +65,7 @@ sed --in-place 's/#CIDELETE /d' .travis.yml
 
 echo "Create a commit"
 git add -A
-git commit -am "[bot] Updating Conan dependencies!"
+git commit -am "[bot] Updating Conan dependencies! \n Triggered by: https://github.com/inexor-game/code/commit/${TRAVIS_COMMIT}"
 
 
 git config credential.helper "store --file=.git/credentials"

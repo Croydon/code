@@ -1,6 +1,6 @@
 requires = (("Kainjow_Mustache/2.0@inexorgame/stable"),
             ("pugixml/1.7@inexorgame/testing"),
-            ("Boost/1.64.0@inexorgame/stable"), # These are requirements of gluegen
+            ("Boost/1.64.0@inexorgame/stable"),
             ("RapidJSON/1.0.2@inexorgame/stable"),
             ("zlib/1.2.11@lasote/stable"),
             ("gtest/1.8.0@lasote/stable"),
@@ -11,6 +11,7 @@ requires = (("Kainjow_Mustache/2.0@inexorgame/stable"),
             ("CEF/3.2704.1424.gc3f0a5b@Croydon/testing"),
             ("Protobuf/3.1.0@inexorgame/stable"),
             ("gRPC/1.1.0-dev@inexorgame/stable"))
+
 
 options = '''
   zlib:shared=False
