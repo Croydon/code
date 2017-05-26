@@ -1,4 +1,3 @@
-sudo: required
 dist: trusty
 language: cpp
 
@@ -16,9 +15,11 @@ jobs:
       env: docker_tag="NODOCKER" conan_prebuilds="true"
     - stage: building
       os: linux
+      sudo: required
       compiler: clang
       env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9" CMAKE_CC="clang-3.9" CMAKE_CXX="clang++-3.9" NIGHTLY="true"
     - os: linux
+      sudo: required
       compiler: gcc
       env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" NIGHTLY="true"
 
