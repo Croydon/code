@@ -46,8 +46,9 @@ jobs:
 before_install:
   # Get our CI Docker image
   - if [ "${os}" == 'linux' ]; then
-      if ! [ "${compiler}" == 'conan' ];
-        then sudo docker pull inexorgame/ci-docker':'${docker_tag} ;
+      if [ "${compiler}" == 'conan' ]; then
+      else
+        sudo docker pull inexorgame/ci-docker':'${docker_tag} ;
       fi
     fi
 
