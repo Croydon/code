@@ -54,12 +54,11 @@ before_install:
 script:
   - if [ "${compiler}" == "conan" ]; then
       bash ./tool/travis_conditional_conan_package_generating.sh ;
-      exit 0 ;
     fi
   - if [ "${GLOBAL_NIGHTLY}" == "false" ]; then
     NIGHTLY="false";
     fi
-  - if [ "${GLOBAL_NIGHTLY" == "conan" ]; then
+  - if [ "${GLOBAL_NIGHTLY}" == "conan" ]; then
       NIGHTLY_USER="${CONAN_USER}";
       NIGHTLY_PASSWORD="${CONAN_PASSWORD}";
     else
