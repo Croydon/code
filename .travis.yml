@@ -45,14 +45,14 @@ jobs:
 
 before_install:
   # Get our CI Docker image
-  - if [ ${os} == 'linux' ]; then
-      if ! [ ${compiler} == 'conan' ]; then
-        sudo docker pull inexorgame/ci-docker':'${docker_tag} ;
+  - if [ "$os" == 'linux' ]; then
+      if ! [ "$compiler" == 'conan' ];
+        then sudo docker pull inexorgame/ci-docker':'${docker_tag} ;
       fi
     fi
 
 script:
-  - if [ ${compiler} == "conan" ]; then
+  - if [ "$compiler" == "conan" ]; then
       ./tool/travis_conditional_conan_package_generating.sh
       exit 1
     fi
