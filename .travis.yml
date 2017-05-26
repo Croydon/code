@@ -47,6 +47,7 @@ before_install:
   # Get our CI Docker image
   - if [ "${os}" == 'linux' ]; then
       if [ "${compiler}" == 'conan' ]; then
+        echo "" ;
       else
         sudo docker pull inexorgame/ci-docker':'${docker_tag} ;
       fi
@@ -57,7 +58,7 @@ script:
       bash ./tool/travis_conditional_conan_package_generating.sh ;
     fi
   - if [ "${GLOBAL_NIGHTLY}" == "false" ]; then
-    NIGHTLY="false";
+      NIGHTLY="false";
     fi
   - if [ "${GLOBAL_NIGHTLY}" == "conan" ]; then
       NIGHTLY_USER="${CONAN_USER}";
