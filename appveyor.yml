@@ -13,6 +13,9 @@
 # The ci-prebuilds version will have un-comment every line starting with #CI(followed by an empty space)
 # e.g. #CI echo this only gets executed in ci-prebuilds
 #
+# The ci-prebuilds version will have every line removed containing #CEDELETE
+# e.g. #CIDELETE this line is not visible in ci-prebuilds aka. won't get executed
+#
 
 version: 0.{build}
 clone_depth: 1

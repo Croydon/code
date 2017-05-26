@@ -2,10 +2,12 @@
 # This file checks if we change files, which are important for mass building for Conan packages
 # If they changed we are going to trigger a mass building
 # We are doing this by updating the submodule in inexor-game/ci-prebuilds invoking thereby Travis/AppVeyor processes
-# We also commit possible changes in appveyor.yml and travis.yml
-# IN both, appveyor.yml and travis.yml, lines with #CI (followed by a space) are getting un-comment
+# We also commit possible changes in appveyor.yml and .travis.yml
+# In both, appveyor.yml and .travis.yml, lines with #CI (followed by a space) are getting un-comment
+# In both, appveyor.yml and .travis.yml, lines with #CIDELETE are getting completely removed
 
-# TODO: support for branches with conan- instead of only master to test mass building of packages easily
+
+# TODO: support for branches with conan- instead of only master to test mass building of packages easily (maybe)
 
 # this makes the entire script fail if one commands fail
 set -e
@@ -55,6 +57,11 @@ cd ../
 
 echo "Get possible updates of appveyor.yml"
 sed 's/#CI //' inexor/appveyor.yml > appveyor.yml
+sed --in-place 's/#CIDELETE /d' appveyor.yml
+
+echo "Get possible updates of .travis.yml"
+sed 's/#CI //' inexor/.travis.yml > .travis.yml
+sed --in-place 's/#CIDELETE /d' .travis.yml
 
 echo "Create a commit"
 git add -A
