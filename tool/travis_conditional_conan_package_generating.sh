@@ -9,7 +9,7 @@
 set -e
 
 # Making sure we NEVER execute anything of this for pull requests as this could be a huge security risk
-if [ test "${TRAVIS_PULL_REQUEST}" != false ]; then
+if [[ "${TRAVIS_PULL_REQUEST}" != false ]]; then
     exit 0
 fi
 

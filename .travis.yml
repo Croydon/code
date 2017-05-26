@@ -12,6 +12,7 @@ jobs:
   include:
     - stage: Conan
       os: linux
+      sudo: false
       env: docker_tag="NODOCKER" conan_prebuilds="true"
     - stage: building
       os: linux
