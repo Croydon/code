@@ -14,7 +14,7 @@ jobs:
       os: linux
       sudo: false
       env: docker_tag="NODOCKER" conan_prebuilds="true"
-    - stage: building
+    - stage: Testing
       os: linux
       sudo: required
       compiler: clang
