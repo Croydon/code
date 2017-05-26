@@ -21,6 +21,7 @@ if ! [[ "${TRAVIS_BRANCH}" == "rebased2" ]]; then
 fi
 
 # Check if important files did change in the last commit
+echo "Filtered git diff output:"
 echo "$(git diff --name-only HEAD^ -- dependencies.py)"
 
 if [[ "$(git diff --name-only HEAD^ -- dependencies.py)" == "" ]]; then
