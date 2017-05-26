@@ -57,15 +57,16 @@ cd ../
 
 echo "Get possible updates of appveyor.yml"
 sed 's/#CI //' inexor/appveyor.yml > appveyor.yml
-sed --in-place '/#CIDELETE /d' appveyor.yml
+sed --in-place '/#CIDELETE/d' appveyor.yml
 
 echo "Get possible updates of .travis.yml"
 sed 's/#CI //' inexor/.travis.yml > .travis.yml
-sed --in-place '/#CIDELETE /d' .travis.yml
+sed --in-place '/#CIDELETE/d' .travis.yml
 
 echo "Create a commit"
 git add -A
-git commit -am "[bot] Updating Conan dependencies! \n Triggered by: https://github.com/inexor-game/code/commit/${TRAVIS_COMMIT}"
+git commit -am '[bot] Updating Conan dependencies!
+Triggered by: https://github.com/inexor-game/code/commit/${TRAVIS_COMMIT}'
 
 
 git config credential.helper "store --file=.git/credentials"
