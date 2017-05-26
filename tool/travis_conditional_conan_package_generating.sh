@@ -24,11 +24,11 @@ if ! [[ "${TRAVIS_BRANCH}" == "rebased2" ]]; then
     exit 0
 fi
 
-# Check if important files did change in the last commit
+# Check if important files did change in the last commit (the commit we are checking out)
 echo "Filtered git diff output:"
-echo "$(git diff --name-only HEAD^ -- dependencies.py)"
+echo "$(git diff --name-only ${TRAVIS_COMMIT}^ -- dependencies.py)"
 
-if [[ "$(git diff --name-only HEAD^ -- dependencies.py)" == "" ]]; then
+if [[ "$(git diff --name-only ${TRAVIS_COMMIT}^ -- dependencies.py)" == "" ]]; then
     echo "No changes found in Conan dependencies!"
     exit 0
 fi
