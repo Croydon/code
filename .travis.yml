@@ -12,7 +12,7 @@ jobs:
   include:
     - stage: Conan
       os: linux
-      env: docker_tag="NODOCKER"
+      env: docker_tag="NODOCKER" conan_prebuilds="true"
     - stage: building
       os: linux
       compiler: clang
@@ -49,10 +49,10 @@ before_install:
     fi
 
 script:
-  - if [ "${stage}" == "Conan" ]; then
+  - if [ "${conan_prebuilds}" == "true" ]; then
       bash ./tool/travis_conditional_conan_package_generating.sh ;
     else
-      echo "${stage}" ;
+      echo "${conan_prebuilds}" ;
     fi
   - if [ "${GLOBAL_NIGHTLY}" == "false" ]; then
       NIGHTLY="false";
