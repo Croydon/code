@@ -10,16 +10,16 @@ set -e
 
 # Making sure we NEVER execute anything of this for pull requests as this could be a huge security risk
 if [ test "${TRAVIS_PULL_REQUEST}" != false ]; then
-    exit 1
+    exit 0
 fi
 
 if ! ["${TRAVIS_BRANCH}" == "master"]; then
-    exit 1
+    exit 0
 fi
 
 # Check if important files did change in the last commit
 if [[ "$(git diff --name-only HEAD^^ -- dependencies.py)" == "" ]]; then
-    exit 1
+    exit 0
 fi
 
 cd ..
@@ -43,4 +43,4 @@ git config credential.helper "store --file=.git/credentials"
 echo "https://${GITHUB_TOKEN}:@github.com" > .git/credentials
 
 git push
-exit 1
+exit 0

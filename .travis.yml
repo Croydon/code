@@ -54,7 +54,9 @@ before_install:
 script:
   - if [ "$compiler" == "conan" ]; then
       ./tool/travis_conditional_conan_package_generating.sh
-      exit 1
+    fi
+  - if [ "$compiler" == "conan" ]; then
+        exit 0
     fi
   - if [ "$GLOBAL_NIGHTLY" == "false" ]; then
     NIGHTLY="false";
