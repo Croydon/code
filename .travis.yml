@@ -29,7 +29,7 @@ git:
 
 jobs:
   include:
-  # We run the following jobs in our main repository:
+  # We run the following jobs in our main repository:    #CIDELETE
     - stage: Conan #CIDELETE
       os: linux #CIDELETE
       env: docker_tag="NODOCKER" conan_prebuilds="true" #CIDELETE
@@ -40,6 +40,48 @@ jobs:
     - os: linux #CIDELETE
       compiler: gcc #CIDELETE
       env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" NIGHTLY="true" #CIDELETE
+    #- os: linux #CIDELETE
+      #sudo: required #CIDELETE
+      #dist: trusty #CIDELETE
+      #env: TARGET=apidoc #CIDELETE
+      #git: #CIDELETE
+        #submodules: false #CIDELETE
+
+    # We run the following jobs in ci-prebuilds:
+    # Our main compilers we run tests for
+    #CI - os: linux
+      #CI compiler: gcc
+      #CI env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" NIGHTLY="conan"
+
+    #CI - os: linux
+      #CI compiler: clang
+      #CI env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="4.0" CMAKE_CC="clang-4.0" CMAKE_CXX="clang++-4.0" NIGHTLY="conan"
+
+    # Older compilers we compile Conan packages for, to speed things up for other people
+    #CI - os: linux
+      #CI compiler: gcc
+      #CI env: os=linux docker_tag="legacy" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="5.4" CMAKE_CC="gcc-5" CMAKE_CXX="g++-5" NIGHTLY="conan"
+
+    #CI - os: linux
+      #CI compiler: clang
+      #CI env: os=linux docker_tag="legacy" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9" CMAKE_CC="clang-3.9" CMAKE_CXX="clang++-3.9" NIGHTLY="conan"
+
+    #CI - os: linux
+      #CI compiler: clang
+      #CI env: os=linux docker_tag="legacy" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.8" CMAKE_CC="clang-3.8" CMAKE_CXX="clang++-3.8" NIGHTLY="conan"
+
+    #- os: osx
+      #sudo: false
+      #osx_image: xcode8
+      #compiler: clang
+      #env: os=osx compiler=clang TARGET="osx" CMAKE_FLAGS="-DCMAKE_CXX_COMPILER=clang++-3.9 -DCMAKE_C_COMPILER=clang-3.9 -DBUILD_ALL=1"
+
+  #CI allow_failures:
+    #CI - env: os=linux docker_tag="legacy" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="5.4" CMAKE_CC="gcc-5" CMAKE_CXX="g++-5" NIGHTLY="conan"
+    #CI - env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="4.0" CMAKE_CC="clang-4.0" CMAKE_CXX="clang++-4.0" NIGHTLY="conan"
+    #CI - env: os=linux docker_tag="legacy" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.8" CMAKE_CC="clang-3.8" CMAKE_CXX="clang++-3.8" NIGHTLY="conan"
+
+  #CI fast_finish: true # don't wait for allow_failures to fail, gives faster response
     #- os: linux
       #sudo: required
       #dist: trusty
@@ -47,49 +89,7 @@ jobs:
       #git:
         #submodules: false
 
-  # We run the following jobs in ci-prebuilds:
-  # Our main compilers we run tests for
-     #CI - os: linux
-       #CI compiler: gcc
-       #CI env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" NIGHTLY="conan"
-
-     #CI - os: linux
-       #CI compiler: clang
-       #CI env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="4.0" CMAKE_CC="clang-4.0" CMAKE_CXX="clang++-4.0" NIGHTLY="conan"
-
-  # Older compilers we compile Conan packages for, to speed things up for other people
-     #CI - os: linux
-       #CI compiler: gcc
-       #CI env: os=linux docker_tag="legacy" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="5.4" CMAKE_CC="gcc-5" CMAKE_CXX="g++-5" NIGHTLY="conan"
-
-     #CI - os: linux
-       #CI compiler: clang
-       #CI env: os=linux docker_tag="legacy" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9" CMAKE_CC="clang-3.9" CMAKE_CXX="clang++-3.9" NIGHTLY="conan"
-
-     #CI - os: linux
-       #CI compiler: clang
-       #CI env: os=linux docker_tag="legacy" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.8" CMAKE_CC="clang-3.8" CMAKE_CXX="clang++-3.8" NIGHTLY="conan"
-
-     #- os: osx
-       #sudo: false
-       #osx_image: xcode8
-       #compiler: clang
-       #env: os=osx compiler=clang TARGET="osx" CMAKE_FLAGS="-DCMAKE_CXX_COMPILER=clang++-3.9 -DCMAKE_C_COMPILER=clang-3.9 -DBUILD_ALL=1"
-
-   #CI allow_failures:
-     #CI - env: os=linux docker_tag="legacy" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="5.4" CMAKE_CC="gcc-5" CMAKE_CXX="g++-5" NIGHTLY="conan"
-     #CI - env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="4.0" CMAKE_CC="clang-4.0" CMAKE_CXX="clang++-4.0" NIGHTLY="conan"
-     #CI - env: os=linux docker_tag="legacy" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.8" CMAKE_CC="clang-3.8" CMAKE_CXX="clang++-3.8" NIGHTLY="conan"
-
-   #CI fast_finish: true # don't wait for allow_failures to fail, gives faster response
-     #- os: linux
-       #sudo: required
-       #dist: trusty
-       #env: TARGET=apidoc
-       #git:
-         #submodules: false
-
- ## Old stuff:
+  ## Old stuff:
   #- os: osx
       #sudo: false
       #osx_image: xcode8
