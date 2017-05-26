@@ -56,4 +56,6 @@ echo "https://${GITHUB_TOKEN}:@github.com" > .git/credentials
 
 echo "Push commit"
 git push
+
+echo "Mass building of Conan packages is on its way!"
 exit 0
