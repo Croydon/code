@@ -14,7 +14,7 @@ if [[ "${TRAVIS_PULL_REQUEST}" != false ]]; then
     exit 0
 fi
 
-if ! [[ "${TRAVIS_BRANCH}" == "master" ]]; then
+if ! [[ "${TRAVIS_BRANCH}" == "rebased2" ]]; then
     echo "This isn't the master branch"
     exit 0
 fi
