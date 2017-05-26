@@ -1,3 +1,19 @@
+###########################
+####### README FIRST! #####
+###########################
+# This file should only be edited in our main repository (code)
+# You are doing something wrong
+# if you are trying to edit this file in ci-prebuilds.
+#
+# Our automation is grabbing the version of this file from our main repository
+# and commit it with automatic changes to ci-prebuilds
+# and only when Conan dependencies are actually changed
+# in order to not cause unnecessary rebuilds.
+#
+# The ci-prebuilds version will have un-comment every line starting with #CI(followed by an empty space)
+# e.g. #CI echo this only gets executed in ci-prebuilds
+#
+
 version: 0.{build}
 clone_depth: 1
 clone_folder: C:\projects\inexor-game
@@ -17,10 +33,10 @@ environment:
 
 platform:
   - x64
-  - Win32
+  #CI - Win32
 
 configuration:
-  - Release
+  #CI - Release
   - Debug
 
 # scripts that are called at very beginning, before repo cloning

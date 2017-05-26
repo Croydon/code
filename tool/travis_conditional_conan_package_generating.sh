@@ -2,6 +2,8 @@
 # This file checks if we change files, which are important for mass building for Conan packages
 # If they changed we are going to trigger a mass building
 # We are doing this by updating the submodule in inexor-game/ci-prebuilds invoking thereby Travis/AppVeyor processes
+# We also commit possible changes in appveyor.yml and travis.yml
+# IN both, appveyor.yml and travis.yml, lines with #CI (followed by a space) are getting un-comment
 
 # TODO: support for branches with conan- instead of only master to test mass building of packages easily
 
@@ -41,7 +43,7 @@ git checkout trial5
 git config user.name ${GITHUB_BOT_NAME}
 git config user.email ${GITHUB_BOT_EMAIL}
 
-# Update submodule
+
 echo "Update submodule in ci-prebuilds"
 cd inexor
 # TODO: change to master
@@ -49,6 +51,10 @@ git pull origin rebased2
 # TODO: change to master
 git checkout rebased2
 cd ../
+
+
+echo "Get possible updates of appveyor.yml"
+sed 's/#CI //' inexor/appveyor.yml > appveyor.yml
 
 echo "Create a commit"
 git add -A
@@ -58,8 +64,10 @@ git commit -am "[bot] Updating Conan dependencies!"
 git config credential.helper "store --file=.git/credentials"
 echo "https://${GITHUB_TOKEN}:@github.com" > .git/credentials
 
+
 echo "Push commit"
 git push
+
 
 echo "Mass building of Conan packages is on its way!"
 exit 0
