@@ -14,6 +14,7 @@ if [[ "${TRAVIS_PULL_REQUEST}" != false ]]; then
     exit 0
 fi
 
+# TODO: Change to master
 if ! [[ "${TRAVIS_BRANCH}" == "rebased2" ]]; then
     echo "This isn't the master branch"
     exit 0
@@ -30,7 +31,8 @@ echo "Configure git"
 cd ..
 git clone --recursive https://github.com/inexor-game/ci-prebuilds.git "ci-prebuilds"
 cd "ci-prebuilds"
-git checkout master
+# TODO: Change to master
+git checkout trial5
 
 git config user.name ${GITHUB_BOT_NAME}
 git config user.email ${GITHUB_BOT_EMAIL}
