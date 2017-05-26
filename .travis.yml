@@ -2,22 +2,26 @@ sudo: required
 dist: trusty
 language: cpp
 
-services: 
+services:
   - docker
-  
+
 git:
   depth: 15
 
-matrix:
+jobs:
   include:
-    - os: linux
+    - stage: ConanCheck
+      os: linux
+      compiler: conan
+    - stage: building
+      os: linux
       compiler: clang
       env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9" CMAKE_CC="clang-3.9" CMAKE_CXX="clang++-3.9" NIGHTLY="true"
 
     - os: linux
       compiler: gcc
       env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" NIGHTLY="true"
-      
+
   #- os: osx
       #sudo: false
       #osx_image: xcode8
@@ -29,9 +33,9 @@ matrix:
       #osx_image: xcode8
       #compiler: clang
       #env: os=linux compiler=clang TARGET="osx" CMAKE_FLAGS="-DCMAKE_CXX_COMPILER=clang++-3.9 -DCMAKE_C_COMPILER=clang-3.9 -DBUILD_ALL=1"
-      
+
   #fast_finish: true # don't wait for allow_failures (OSX) to fail, gives faster respons
-  
+
     #- os: linux
       #sudo: required
       #dist: trusty
@@ -41,11 +45,17 @@ matrix:
 
 before_install:
   # Get our CI Docker image
-  - if [ ${os} == 'linux' ]; then 
-    sudo docker pull inexorgame/ci-docker':'${docker_tag} ;
+  - if [ ${os} == 'linux' ]; then
+      if ! [ ${compiler} == 'conan' ]; then
+        sudo docker pull inexorgame/ci-docker':'${docker_tag} ;
+      fi
     fi
-    
+
 script:
+  - if [ ${compiler} == "conan" ]; then
+      ./tool/travis_conditional_conan_package_generating.sh
+      exit 1
+    fi
   - if [ "$GLOBAL_NIGHTLY" == "false" ]; then
     NIGHTLY="false";
     fi
@@ -56,9 +66,9 @@ script:
       NIGHTLY_USER="${FTP_USER}";
       NIGHTLY_PASSWORD="${FTP_PASSWORD}";
     fi
-  - if [ ${os} == 'linux' ]; then 
+  - if [ ${os} == 'linux' ]; then
     sudo docker run -v $(pwd)':'/inexor --net=host -it inexorgame/ci-docker':'${docker_tag} /inexor/tool/travis.sh target_script / ${TARGET} ${CONAN_COMPILER} ${CONAN_COMPILER_VERSION} ${CMAKE_CC} ${CMAKE_CXX} ${TRAVIS_COMMIT} ${TRAVIS_BRANCH} ${TRAVIS_JOB_NUMBER} ${NIGHTLY} ${NIGHTLY_USER} ${NIGHTLY_PASSWORD} ${FTP_DOMAIN};
     fi
-  - if [ ${os} == 'osx' ]; then 
-    bash tool/travis.sh target_before_install; 
+  - if [ ${os} == 'osx' ]; then
+    bash tool/travis.sh target_before_install;
     fi
