@@ -136,7 +136,7 @@ nigthly_build() {
   #if test "$media" = true; then (
     #cd "$gitroot"
     #curl -LOk https://github.com/inexor-game/data/archive/master.zip
-    #unzip "master.zip" -d "$outd" 2>/dev/null 
+    #unzip "master.zip" -d "$outd" 2>/dev/null
     #rm "master.zip"
     #cd "$outd"
     #mv "data-master" "media/data"
@@ -169,12 +169,12 @@ nigthly_build() {
 
   (
     cd "$gitroot"
-    ls -a | grep -Fivx "$ignore" | xargs -t cp -rt "$outd" 
+    ls -a | grep -Fivx "$ignore" | xargs -t cp -rt "$outd"
   )
 
   (
     cd "`dirname "$outd"`"
-    zip -r -dd -q "$zipf" "`basename $outd`" 
+    zip -r -dd -q "$zipf" "`basename $outd`"
   )
 
   (
@@ -189,7 +189,7 @@ nigthly_build() {
     echo "${build}" > "master-latest-$TARGET.txt"
     upload "master-latest-$TARGET.zip" "master-latest-$TARGET.txt"
   ) fi
-  
+
   return 0
 }
 
@@ -254,8 +254,13 @@ FTP_DOMAIN="${14}"
 
 # Name of this build
 export build="$(echo "${branch}-${jobno}" | sed 's#/#-#g')-${TARGET}"
-
 export main_repo="inexor-game/code"
+
+# Workaround Boost.Build problem to not be able to found Clang
+if [[ $CC == clang* ]]; then
+  sudo ln -s /usr/bin/${CC} /usr/bin/clang
+  sudo ln -s /usr/bin/${CXX} /usr/bin/clang++
+fi
 
 
 if [ -z "$2" ]; then
