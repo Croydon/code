@@ -76,10 +76,10 @@ jobs:
       #compiler: clang
       #env: os=osx compiler=clang TARGET="osx" CMAKE_FLAGS="-DCMAKE_CXX_COMPILER=clang++-3.9 -DCMAKE_C_COMPILER=clang-3.9 -DBUILD_ALL=1"
 
-  #CI allow_failures:
-    #CI - env: os=linux docker_tag="legacy" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="5.4" CMAKE_CC="gcc-5" CMAKE_CXX="g++-5" NIGHTLY="conan"
-    #CI - env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="4.0" CMAKE_CC="clang-4.0" CMAKE_CXX="clang++-4.0" NIGHTLY="conan"
-    #CI - env: os=linux docker_tag="legacy" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.8" CMAKE_CC="clang-3.8" CMAKE_CXX="clang++-3.8" NIGHTLY="conan"
+  #CIDELETE allow_failures:
+    #CIDELETE - env: os=linux docker_tag="legacy" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="5.4" CMAKE_CC="gcc-5" CMAKE_CXX="g++-5" NIGHTLY="conan"
+    #CIDELETE - env: os=linux docker_tag="legacy" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9" CMAKE_CC="clang-3.9" CMAKE_CXX="clang++-3.9" NIGHTLY="conan"
+    #CIDELETE - env: os=linux docker_tag="legacy" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.8" CMAKE_CC="clang-3.8" CMAKE_CXX="clang++-3.8" NIGHTLY="conan"
 
   #CI fast_finish: true # don't wait for allow_failures to fail, gives faster response
     #- os: linux
