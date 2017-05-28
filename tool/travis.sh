@@ -262,6 +262,12 @@ if [[ $CC == clang* ]]; then
   sudo ln -s /usr/bin/${CXX} /usr/bin/clang++
 fi
 
+# Just to make sure that no package uses the wrong GCC version...
+if [[ $CC == gcc* ]]; then
+  sudo ln -s /usr/bin/${CC} /usr/bin/gcc
+  sudo ln -s /usr/bin/${CXX} /usr/bin/gcc++
+fi
+
 
 if [ -z "$2" ]; then
   export gitroot="/inexor"
