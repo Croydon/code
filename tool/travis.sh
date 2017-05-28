@@ -258,14 +258,14 @@ export main_repo="inexor-game/code"
 
 # Workaround Boost.Build problem to not be able to found Clang
 if [[ $CC == clang* ]]; then
-  sudo ln -s /usr/bin/${CC} /usr/bin/clang
-  sudo ln -s /usr/bin/${CXX} /usr/bin/clang++
+  sudo ln -sf /usr/bin/${CC} /usr/bin/clang
+  sudo ln -sf /usr/bin/${CXX} /usr/bin/clang++
 fi
 
 # Just to make sure that no package uses the wrong GCC version...
 if [[ $CC == gcc* ]]; then
-  sudo ln -s /usr/bin/${CC} /usr/bin/gcc
-  sudo ln -s /usr/bin/${CXX} /usr/bin/gcc++
+  sudo ln -sf /usr/bin/${CC} /usr/bin/gcc
+  sudo ln -sf /usr/bin/${CXX} /usr/bin/gcc++
 fi
 
 
