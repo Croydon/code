@@ -60,6 +60,12 @@ build() {
   (
     mkcd "/tmp/inexor-build-${build}"
     echo "executed conan install "$gitroot" --scope build_all=1 --build=missing -s compiler=$CONAN_COMPILER -s compiler.version=$CONAN_COMPILER_VERSION -s compiler.libcxx=libstdc++11 -e CC=$CC -e CXX=$CXX"
+
+    # TODO: FIXME: We need a hardcoded workaround for GCC5.4 to link gtest successfully
+    if [[ $CC == "gcc-5.4" ]]; then
+        conan install gtest/1.8.0@lasote/stable --build -s compiler="$CONAN_COMPILER" -s compiler.version="$CONAN_COMPILER_VERSION" -s compiler.libcxx="libstdc++11" -e CC="$CC" -e CXX="$CXX"
+    fi
+
     conan install "$gitroot" --scope build_all=1 --build=missing -s compiler="$CONAN_COMPILER" -s compiler.version="$CONAN_COMPILER_VERSION" -s compiler.libcxx="libstdc++11" -e CC="$CC" -e CXX="$CXX"
     conan build "$gitroot"
   )
