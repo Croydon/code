@@ -16,6 +16,7 @@ requires = (("Kainjow_Mustache/2.0@inexorgame/stable"),
 options = '''
   zlib:shared=False
   gtest:shared=False
+  gtest:no_gmock=True
   ENet:shared=False
   Boost:shared=False
   SDL2:shared=False
