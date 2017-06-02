@@ -36,10 +36,10 @@ jobs:
     - stage: Testing #CIDELETE
       os: linux #CIDELETE
       compiler: clang #CIDELETE
-      env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="4.0" CMAKE_CC="clang-4.0" CMAKE_CXX="clang++-4.0" NIGHTLY="true" #CIDELETE
+      env: os=linux CMAKE_CC="clang-4.0" CMAKE_CXX="clang++-4.0" CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="4.0" TARGET=linux_clang docker_tag="optimization" NIGHTLY="true" #CIDELETE
     - os: linux #CIDELETE
       compiler: gcc #CIDELETE
-      env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" NIGHTLY="true" #CIDELETE
+      env: os=linux CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" TARGET=linux_gcc docker_tag="optimization" NIGHTLY="true" #CIDELETE
     #- os: linux #CIDELETE
       #sudo: required #CIDELETE
       #dist: trusty #CIDELETE
@@ -51,27 +51,27 @@ jobs:
     # Our main compilers we run tests for
     #CI - os: linux
       #CI compiler: gcc
-      #CI env: os=linux docker_tag="gcc070clang040" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="7.1" CMAKE_CC="gcc-7" CMAKE_CXX="g++-7" NIGHTLY="conan"
+      #CI env: os=linux CMAKE_CC="gcc-7" CMAKE_CXX="g++-7" CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="7" TARGET=linux_gcc docker_tag="gcc070clang040" NIGHTLY="conan"
     #CI - os: linux
       #CI compiler: gcc
-      #CI env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" NIGHTLY="conan"
+      #CI env: os=linux CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" TARGET=linux_gcc docker_tag="optimization" NIGHTLY="conan"
 
     #CI - os: linux
       #CI compiler: clang
-      #CI env: os=linux docker_tag="optimization" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="4.0" CMAKE_CC="clang-4.0" CMAKE_CXX="clang++-4.0" NIGHTLY="conan"
+      #CI env: os=linux CMAKE_CC="clang-4.0" CMAKE_CXX="clang++-4.0" CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="4.0" TARGET=linux_clang docker_tag="optimization" NIGHTLY="conan"
 
     # Older compilers we compile Conan packages for, to speed things up for other people
     #CI - os: linux
       #CI compiler: gcc
-      #CI env: os=linux docker_tag="legacy" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="5.4" CMAKE_CC="gcc-5" CMAKE_CXX="g++-5" NIGHTLY="conan"
+      #CI env: os=linux CMAKE_CC="gcc-5" CMAKE_CXX="g++-5" CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="5.4" TARGET=linux_gcc docker_tag="legacy" NIGHTLY="conan"
 
     #CI - os: linux
       #CI compiler: clang
-      #CI env: os=linux docker_tag="legacy" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9" CMAKE_CC="clang-3.9" CMAKE_CXX="clang++-3.9" NIGHTLY="conan"
+      #CI env: os=linux CMAKE_CC="clang-3.9" CMAKE_CXX="clang++-3.9" CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9" TARGET=linux_clang docker_tag="legacy"  NIGHTLY="conan"
 
     #CI - os: linux
       #CI compiler: clang
-      #CI env: os=linux docker_tag="legacy" TARGET=linux_clang CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.8" CMAKE_CC="clang-3.8" CMAKE_CXX="clang++-3.8" NIGHTLY="conan"
+      #CI env: os=linux CMAKE_CC="clang-3.8" CMAKE_CXX="clang++-3.8" CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.8" TARGET=linux_clang docker_tag="legacy" NIGHTLY="conan"
 
     #- os: osx
       #sudo: false
