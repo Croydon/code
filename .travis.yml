@@ -51,6 +51,9 @@ jobs:
     # Our main compilers we run tests for
     #CI - os: linux
       #CI compiler: gcc
+      #CI env: os=linux docker_tag="gcc070clang040" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="7.1" CMAKE_CC="gcc-7" CMAKE_CXX="g++-7" NIGHTLY="conan"
+    #CI - os: linux
+      #CI compiler: gcc
       #CI env: os=linux docker_tag="optimization" TARGET=linux_gcc CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" NIGHTLY="conan"
 
     #CI - os: linux
