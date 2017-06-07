@@ -49,7 +49,7 @@ git config user.email ${GITHUB_BOT_EMAIL}
 echo "Update submodule in ci-prebuilds"
 cd inexor
 # TODO: change to master
-git fetch -all
+git fetch --all
 # TODO: change to master
 git checkout rebased3
 # TODO: change to master
