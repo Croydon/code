@@ -49,9 +49,11 @@ git config user.email ${GITHUB_BOT_EMAIL}
 echo "Update submodule in ci-prebuilds"
 cd inexor
 # TODO: change to master
-git pull origin rebased3
+git fetch -all
 # TODO: change to master
 git checkout rebased3
+# TODO: change to master
+git reset --hard origin/rebased3
 cd ../
 
 
