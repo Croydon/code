@@ -19,7 +19,7 @@ if [[ "${TRAVIS_PULL_REQUEST}" != false ]]; then
 fi
 
 # TODO: Change to master
-if ! [[ "${TRAVIS_BRANCH}" == "rebased2" ]]; then
+if ! [[ "${TRAVIS_BRANCH}" == "rebased3" ]]; then
     echo "This isn't the master branch"
     exit 0
 fi
@@ -49,9 +49,9 @@ git config user.email ${GITHUB_BOT_EMAIL}
 echo "Update submodule in ci-prebuilds"
 cd inexor
 # TODO: change to master
-git pull origin rebased2
+git pull origin rebased3
 # TODO: change to master
-git checkout rebased2
+git checkout rebased3
 cd ../
 
 
