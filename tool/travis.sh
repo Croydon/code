@@ -212,7 +212,7 @@ target_after_success() {
         # Upload all conan packages to conan.io
         conan user --password "${NIGHTLY_PASSWORD}" "${NIGHTLY_USER}"
         set -f
-        conan upload --all --confirm "*${NIGHTLY_USER}*"
+        conan upload --all --force --retry 3 --retry_wait 10 --confirm "*${NIGHTLY_USER}*"
         set +f
     fi
   fi
