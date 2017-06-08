@@ -100,7 +100,7 @@ list(APPEND MSVC_LINKER_FLAGS
   /DEBUG                                # Generate debug information (even for release builds for our stackwalker)
   /MANIFEST:NO                          # No default manifest
   /SAFESEH:NO                           # Do Not Create a table of safe exception handlers (binary incompatible)
-  /NODEFAULTLIB:MSVCRT                  # This fixes linking for 32-bit
+  /NODEFAULTLIB                         # This fixes linking for 32-bit
   )
 list(APPEND MSVC_LINKER_FLAGS_RELEASE
   /OPT:REF                              # Eliminate Unreferenced Data (to revert changes to the binary caused by /DEBUG)
