@@ -14,7 +14,6 @@ requires = (("InexorGlueGen/0.6.0alpha@inexorgame/testing"),
         )
 
 
-
 options = '''
   zlib:shared=False
   gtest:shared=False
