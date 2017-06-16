@@ -217,10 +217,11 @@ target_after_success() {
         nigthly_build
     fi
     if test "$NIGHTLY" = conan; then
+        conan remote add inexor https://api.bintray.com/conan/inexorgame/inexor
         # Upload all conan packages to conan.io
-        conan user --password "${NIGHTLY_PASSWORD}" "${NIGHTLY_USER}"
+        conan user -p "${NIGHTLY_PASSWORD}" -r inexor "${NIGHTLY_USER}"
         set -f
-        conan upload --all --force --retry 3 --retry_wait 10 --confirm "*${NIGHTLY_USER}*"
+        conan upload --all --force -r inexor --retry 3 --retry_wait 10 --confirm "*${NIGHTLY_USER}*"
         set +f
     fi
   fi
