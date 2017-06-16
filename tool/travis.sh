@@ -217,7 +217,7 @@ target_after_success() {
         nigthly_build
     fi
     if test "$NIGHTLY" = conan; then
-        conan remote add inexor https://api.bintray.com/conan/inexorgame/inexor
+        conan remote add inexor https://api.bintray.com/conan/inexorgame/inexor-conan
         # Upload all conan packages to conan.io
         conan user -p "${NIGHTLY_PASSWORD}" -r inexor "${NIGHTLY_USER}"
         set -f
