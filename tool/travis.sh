@@ -221,7 +221,7 @@ target_after_success() {
         # Upload all conan packages to conan.io
         conan user -p "${NIGHTLY_PASSWORD}" -r inexor "${NIGHTLY_USER}"
         set -f
-        conan upload --all --force -r inexor --retry 3 --retry_wait 10 --confirm "*${NIGHTLY_USER}*"
+        conan upload --all --force -r inexor --retry 3 --retry_wait 10 --confirm "*inexorgame*"
         set +f
     fi
   fi
