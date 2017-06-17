@@ -37,7 +37,7 @@ echo "Changes found in Conan dependencies!"
 echo "Configure git"
 
 cd ..
-git clone --recursive https://github.com/inexor-game/ci-prebuilds.git "ci-prebuilds"
+git clone --recursive https://github.com/inexorgame/ci-prebuilds.git "ci-prebuilds"
 cd "ci-prebuilds"
 # TODO: Change to master
 git checkout trial5
@@ -68,7 +68,7 @@ sed --in-place '/#CIDELETE/d' .travis.yml
 echo "Create a commit"
 git add -A
 git commit -am '[bot] Building and uploading Conan dependencies!
-Triggered by: https://github.com/inexor-game/code/commit/'${TRAVIS_COMMIT}
+Triggered by: https://github.com/inexorgame/inexor-core/commit/'${TRAVIS_COMMIT}
 
 
 
