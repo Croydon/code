@@ -1,9 +1,9 @@
 ###########################
 ####### README FIRST! #####
 ###########################
-# This file should only be edited in our main repository (code)
+# This file should only be edited in our main repository (inexor-core)
 # You are doing something wrong
-# if you are trying to edit this file in ci-prebuilds.
+# if you are trying to edit this file in the master branch of ci-prebuilds.
 #
 # Our automation is grabbing the version of this file from our main repository
 # and commit it with automatic changes to ci-prebuilds
@@ -13,7 +13,7 @@
 # The ci-prebuilds version will have un-comment every line starting with #CI(followed by an empty space)
 # e.g. #CI echo this only gets executed in ci-prebuilds
 #
-# The ci-prebuilds version will have every line removed containing #CEDELETE
+# The ci-prebuilds version will have every line removed containing #CIDELETE
 # e.g. #CIDELETE this line is not visible in ci-prebuilds aka. won't get executed
 #
 
