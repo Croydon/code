@@ -137,7 +137,7 @@ build() {
         #conan install gtest/1.8.0@lasote/stable --build -s compiler="$CONAN_COMPILER" -s compiler.version="$CONAN_COMPILER_VERSION" -s compiler.libcxx="libstdc++11" -e CC="$CC" -e CXX="$CXX"
     #fi
 
-    conan remote add inexor https://api.bintray.com/conan/inexorgame/inexor-conan
+    conan remote add inexor https://api.bintray.com/conan/inexorgame/inexor-conan --insert
 
     if test "$NIGHTLY" = conan; then
       echo "executed conan install "$gitroot" --scope build_all=1 --build -s compiler=$CONAN_COMPILER -s compiler.version=$CONAN_COMPILER_VERSION -s compiler.libcxx=libstdc++11 -e CC=$CC -e CXX=$CXX"
