@@ -17,10 +17,6 @@
 # e.g. #CIDELETE this line is not visible in ci-prebuilds aka. won't get executed
 #
 
-sudo: required
-dist: trusty
-language: cpp
-
 notifications:
   email:
     on_success: never
@@ -37,51 +33,67 @@ jobs:
   # We run the following jobs in our main repository:    #CIDELETE
     - stage: Conan                                       #CIDELETE
       os: linux                                          #CIDELETE
+      dist: trusty                                       #CIDELETE
+      sudo: false                                        #CIDELETE
       env: docker_tag="NODOCKER" conan_prebuilds="true"  #CIDELETE
     - stage: Testing                                     #CIDELETE
       os: linux                                          #CIDELETE
+      dist: trusty                                       #CIDELETE
+      sudo: required                                     #CIDELETE
       compiler: clang                                    #CIDELETE
       env: CMAKE_CC="clang-4.0" CMAKE_CXX="clang++-4.0" CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="4.0" TARGET=linux_clang docker_tag="optimization" NIGHTLY="true" #CIDELETE
     - os: linux                                          #CIDELETE
+      dist: trusty                                       #CIDELETE
+      sudo: required                                     #CIDELETE
       compiler: gcc                                      #CIDELETE
       env: CMAKE_CC="gcc-7" CMAKE_CXX="g++-7" CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="7.1" TARGET=linux_gcc docker_tag="gcc070clang040" NIGHTLY="true" #CIDELETE
     - stage: "Create GitHub Tag"
       os: linux                                          #CIDELETE
-      sudo: required                                     #CIDELETE
+      sudo: false                                        #CIDELETE
       dist: trusty                                       #CIDELETE
-      env: TARGET=new_version_tagger                     #CIDELETE
+      env: docker_tag="NODOCKER" TARGET=new_version_tagger #CIDELETE
       git:                                               #CIDELETE
         submodules: false                                #CIDELETE
       branches:                                          #CIDELETE
         only:                                            #CIDELETE
           - master                                       #CIDELETE
-    #- os: linux #CIDELETE
-      #sudo: required #CIDELETE
-      #dist: trusty #CIDELETE
-      #env: TARGET=apidoc #CIDELETE
-      #git: #CIDELETE
-        #submodules: false #CIDELETE
+    #- os: linux                                         #CIDELETE
+      #sudo: false                                       #CIDELETE
+      #dist: trusty                                      #CIDELETE
+      #env: docker_tag="NODOCKER" TARGET=apidoc          #CIDELETE
+      #git:                                              #CIDELETE
+        #submodules: false                               #CIDELETE
 
     # We run the following jobs in ci-prebuilds:
     # Our main compilers we run tests for
     #CI - os: linux
+      #CI dist: trusty
+      #CI sudo: required
       #CI compiler: gcc
       #CI env: CMAKE_CC="gcc-7" CMAKE_CXX="g++-7" CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="7.1" TARGET=linux_gcc docker_tag="gcc070clang040" NIGHTLY="conan"
 
     #CI - os: linux
+      #CI dist: trusty
+      #CI sudo: required
       #CI compiler: clang
       #CI env: CMAKE_CC="clang-4.0" CMAKE_CXX="clang++-4.0" CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="4.0" TARGET=linux_clang docker_tag="optimization" NIGHTLY="conan"
 
     # Older compilers we compile Conan packages for, to speed things up for other people
     #CI - os: linux
+      #CI dist: trusty
+      #CI sudo: required
       #CI compiler: gcc
       #CI env: CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" TARGET=linux_gcc docker_tag="optimization" NIGHTLY="conan"
 
     #CI - os: linux
+      #CI dist: trusty
+      #CI sudo: required
       #CI compiler: gcc
       #CI env: CMAKE_CC="gcc-5" CMAKE_CXX="g++-5" CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="5.4" TARGET=linux_gcc docker_tag="legacy" NIGHTLY="conan"
 
     #CI - os: linux
+      #CI dist: trusty
+      #CI sudo: required
       #CI compiler: clang
       #CI env: CMAKE_CC="clang-3.9" CMAKE_CXX="clang++-3.9" CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9" TARGET=linux_clang docker_tag="legacy"  NIGHTLY="conan"
 
@@ -104,7 +116,7 @@ jobs:
     #- os: linux
       #sudo: required
       #dist: trusty
-      #env: TARGET=apidoc
+      #env: docker_tag="NODOCKER" TARGET=apidoc
       #git:
         #submodules: false
 
@@ -113,7 +125,7 @@ jobs:
       #sudo: false
       #osx_image: xcode8
       #compiler: clang
-      #env: TARGET="osx" CMAKE_FLAGS="-DCMAKE_CXX_COMPILER=clang++-3.8 -DCMAKE_C_COMPILER=clang-3.8"
+      #env: docker_tag="NODOCKER" TARGET="osx" CMAKE_FLAGS="-DCMAKE_CXX_COMPILER=clang++-3.8 -DCMAKE_C_COMPILER=clang-3.8"
 
 
   #allow_failures:
