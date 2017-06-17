@@ -17,8 +17,6 @@
 # e.g. #CIDELETE this line is not visible in ci-prebuilds aka. won't get executed
 #
 
-language: cpp
-
 notifications:
   email:
     on_success: never
@@ -34,11 +32,13 @@ jobs:
       os: linux                                          #CIDELETE
       dist: trusty                                       #CIDELETE
       sudo: false                                        #CIDELETE
+      language: cpp                                      #CIDELETE
       env: docker_tag="NODOCKER" conan_prebuilds="true"  #CIDELETE
     - stage: Testing                                     #CIDELETE
       os: linux                                          #CIDELETE
       dist: trusty                                       #CIDELETE
       sudo: required                                     #CIDELETE
+      language: cpp                                      #CIDELETE
       compiler: clang                                    #CIDELETE
       services:                                          #CIDELETE
         - docker                                         #CIDELETE
@@ -46,6 +46,7 @@ jobs:
     - os: linux                                          #CIDELETE
       dist: trusty                                       #CIDELETE
       sudo: required                                     #CIDELETE
+      language: cpp                                      #CIDELETE
       compiler: gcc                                      #CIDELETE
       services:                                          #CIDELETE
         - docker                                         #CIDELETE
@@ -54,6 +55,7 @@ jobs:
       os: linux                                          #CIDELETE
       sudo: false                                        #CIDELETE
       dist: trusty                                       #CIDELETE
+      language: cpp                                      #CIDELETE
       env: docker_tag="NODOCKER" TARGET=new_version_tagger #CIDELETE
       git:                                               #CIDELETE
         submodules: false                                #CIDELETE
@@ -63,6 +65,7 @@ jobs:
     #- os: linux                                         #CIDELETE
       #sudo: false                                       #CIDELETE
       #dist: trusty                                      #CIDELETE
+      #language: cpp                                     #CIDELETE
       #env: docker_tag="NODOCKER" TARGET=apidoc          #CIDELETE
       #git:                                              #CIDELETE
         #submodules: false                               #CIDELETE
@@ -72,6 +75,7 @@ jobs:
     #CI - os: linux
       #CI dist: trusty
       #CI sudo: required
+      #CI language: cpp
       #CI compiler: gcc
       #CI services:
         #CI - docker
@@ -80,6 +84,7 @@ jobs:
     #CI - os: linux
       #CI dist: trusty
       #CI sudo: required
+      #CI language: cpp
       #CI compiler: clang
       #CI services:
         #CI - docker
@@ -89,6 +94,7 @@ jobs:
     #CI - os: linux
       #CI dist: trusty
       #CI sudo: required
+      #CI language: cpp
       #CI compiler: gcc
       #CI services:
         #CI - docker
@@ -97,6 +103,7 @@ jobs:
     #CI - os: linux
       #CI dist: trusty
       #CI sudo: required
+      #CI language: cpp
       #CI compiler: gcc
       #CI services:
         #CI - docker
@@ -105,6 +112,7 @@ jobs:
     #CI - os: linux
       #CI dist: trusty
       #CI sudo: required
+      #CI language: cpp
       #CI compiler: clang
       #CI services:
         #CI - docker
@@ -113,6 +121,7 @@ jobs:
     #CI - os: linux
       #CI dist: trusty
       #CI sudo: required
+      #CI language: cpp
       #CI compiler: clang
       #CI services:
         #CI - docker
@@ -121,6 +130,7 @@ jobs:
     #- os: osx
       #sudo: false
       #osx_image: xcode8
+      #language: cpp 
       #compiler: clang
       #env: compiler=clang TARGET="osx" CMAKE_FLAGS="-DCMAKE_CXX_COMPILER=clang++-3.9 -DCMAKE_C_COMPILER=clang-3.9 -DBUILD_ALL=1"
 
@@ -133,6 +143,7 @@ jobs:
     #- os: linux
       #sudo: required
       #dist: trusty
+      #language: cpp
       #env: docker_tag="NODOCKER" TARGET=apidoc
       #git:
         #submodules: false
@@ -141,6 +152,7 @@ jobs:
   #- os: osx
       #sudo: false
       #osx_image: xcode8
+      #language: cpp
       #compiler: clang
       #env: docker_tag="NODOCKER" TARGET="osx" CMAKE_FLAGS="-DCMAKE_CXX_COMPILER=clang++-3.8 -DCMAKE_C_COMPILER=clang-3.8"
 
