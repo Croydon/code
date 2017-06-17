@@ -24,9 +24,6 @@ notifications:
     on_success: never
     on_failure: change
 
-services:
-  - docker
-
 git:
   depth: 15
 
@@ -43,11 +40,15 @@ jobs:
       dist: trusty                                       #CIDELETE
       sudo: required                                     #CIDELETE
       compiler: clang                                    #CIDELETE
+      services:                                          #CIDELETE
+        - docker                                         #CIDELETE
       env: CMAKE_CC="clang-4.0" CMAKE_CXX="clang++-4.0" CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="4.0" TARGET=linux_clang docker_tag="optimization" NIGHTLY="true" #CIDELETE
     - os: linux                                          #CIDELETE
       dist: trusty                                       #CIDELETE
       sudo: required                                     #CIDELETE
       compiler: gcc                                      #CIDELETE
+      services:                                          #CIDELETE
+        - docker                                         #CIDELETE
       env: CMAKE_CC="gcc-7" CMAKE_CXX="g++-7" CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="7.1" TARGET=linux_gcc docker_tag="gcc070clang040" NIGHTLY="true" #CIDELETE
     - stage: "Create GitHub Tag"
       os: linux                                          #CIDELETE
@@ -72,12 +73,16 @@ jobs:
       #CI dist: trusty
       #CI sudo: required
       #CI compiler: gcc
+      #CI services:
+        #CI - docker
       #CI env: CMAKE_CC="gcc-7" CMAKE_CXX="g++-7" CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="7.1" TARGET=linux_gcc docker_tag="gcc070clang040" NIGHTLY="conan"
 
     #CI - os: linux
       #CI dist: trusty
       #CI sudo: required
       #CI compiler: clang
+      #CI services:
+        #CI - docker
       #CI env: CMAKE_CC="clang-4.0" CMAKE_CXX="clang++-4.0" CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="4.0" TARGET=linux_clang docker_tag="optimization" NIGHTLY="conan"
 
     # Older compilers we compile Conan packages for, to speed things up for other people
@@ -85,22 +90,32 @@ jobs:
       #CI dist: trusty
       #CI sudo: required
       #CI compiler: gcc
+      #CI services:
+        #CI - docker
       #CI env: CMAKE_CC="gcc-6" CMAKE_CXX="g++-6" CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="6.3" TARGET=linux_gcc docker_tag="optimization" NIGHTLY="conan"
 
     #CI - os: linux
       #CI dist: trusty
       #CI sudo: required
       #CI compiler: gcc
+      #CI services:
+        #CI - docker
       #CI env: CMAKE_CC="gcc-5" CMAKE_CXX="g++-5" CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="5.4" TARGET=linux_gcc docker_tag="legacy" NIGHTLY="conan"
 
     #CI - os: linux
       #CI dist: trusty
       #CI sudo: required
       #CI compiler: clang
+      #CI services:
+        #CI - docker
       #CI env: CMAKE_CC="clang-3.9" CMAKE_CXX="clang++-3.9" CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.9" TARGET=linux_clang docker_tag="legacy"  NIGHTLY="conan"
 
     #CI - os: linux
+      #CI dist: trusty
+      #CI sudo: required
       #CI compiler: clang
+      #CI services:
+        #CI - docker
       #CI env: CMAKE_CC="clang-3.8" CMAKE_CXX="clang++-3.8" CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="3.8" TARGET=linux_clang docker_tag="legacy" NIGHTLY="conan"
 
     #- os: osx
