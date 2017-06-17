@@ -69,9 +69,7 @@ jobs:
       #env: docker_tag="NODOCKER" TARGET=apidoc          #CIDELETE
       #git:                                              #CIDELETE
         #submodules: false                               #CIDELETE
-  #CI fast_finish: true # don't wait for allow_failures to fail, gives faster response
-  #allow_failures:
-    #- os: osx
+
 
     # We run the following jobs in ci-prebuilds:
     # Our main compilers we run tests for
@@ -137,7 +135,11 @@ jobs:
       #compiler: clang
       #env: docker_tag="NODOCKER" compiler=clang TARGET="osx" CMAKE_FLAGS="-DCMAKE_CXX_COMPILER=clang++-3.9 -DCMAKE_C_COMPILER=clang-3.9 -DBUILD_ALL=1"
 
+  #CI fast_finish: true # don't wait for allow_failures to fail, gives faster response
+  #allow_failures:
+    #- os: osx
 
+    
 before_install:
   # Get our CI Docker image
   - if ! [[ "${docker_tag}" == 'NODOCKER' ]]; then
