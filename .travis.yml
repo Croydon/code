@@ -21,6 +21,11 @@ sudo: required
 dist: trusty
 language: cpp
 
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+
 services:
   - docker
 
@@ -30,16 +35,26 @@ git:
 jobs:
   include:
   # We run the following jobs in our main repository:    #CIDELETE
-    - stage: Conan #CIDELETE
-      os: linux #CIDELETE
-      env: docker_tag="NODOCKER" conan_prebuilds="true" #CIDELETE
-    - stage: Testing #CIDELETE
-      os: linux #CIDELETE
-      compiler: clang #CIDELETE
+    - stage: Conan                                       #CIDELETE
+      os: linux                                          #CIDELETE
+      env: docker_tag="NODOCKER" conan_prebuilds="true"  #CIDELETE
+    - stage: Testing                                     #CIDELETE
+      os: linux                                          #CIDELETE
+      compiler: clang                                    #CIDELETE
       env: CMAKE_CC="clang-4.0" CMAKE_CXX="clang++-4.0" CONAN_COMPILER="clang" CONAN_COMPILER_VERSION="4.0" TARGET=linux_clang docker_tag="optimization" NIGHTLY="true" #CIDELETE
-    - os: linux #CIDELETE
-      compiler: gcc #CIDELETE
+    - os: linux                                          #CIDELETE
+      compiler: gcc                                      #CIDELETE
       env: CMAKE_CC="gcc-7" CMAKE_CXX="g++-7" CONAN_COMPILER="gcc" CONAN_COMPILER_VERSION="7.1" TARGET=linux_gcc docker_tag="gcc070clang040" NIGHTLY="true" #CIDELETE
+    - stage: "Create GitHub Tag"
+      os: linux                                          #CIDELETE
+      sudo: required                                     #CIDELETE
+      dist: trusty                                       #CIDELETE
+      env: TARGET=new_version_tagger                     #CIDELETE
+      git:                                               #CIDELETE
+        submodules: false                                #CIDELETE
+      branches:                                          #CIDELETE
+        only:                                            #CIDELETE
+          - master                                       #CIDELETE
     #- os: linux #CIDELETE
       #sudo: required #CIDELETE
       #dist: trusty #CIDELETE
@@ -138,3 +153,20 @@ script:
   - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
       bash tool/travis.sh target_before_install;
     fi
+
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    - secure: GkIbJs8haX3uJ2CNcqmc2F+k+cZrt4SyrAIuYHshZqwXhMjACltO1Fh17MtGTWuRduLJ4iATcm+En4Y/cDYojwUjnFVGWbFE6iEi5tQrQYR4paC42VArYodCFe0mYMC2D05IUZxaVDELDo25Lit8FeLIy4pPpLWEh2mGIT+/8S4=
+  file_glob: true
+  file: /tmp/inexor-build/*nexor-*.zip
+  overwrite: true
+  on:
+    # Deploy only if build was caused by a tag push.
+    tags: true
+    condition: "$CC = gcc"
+    repo: inexorgame/inexor-core
+
+after_deploy:
+  - bash tool/travis.sh target_after_deploy

@@ -52,12 +52,83 @@ external_pull_request() {
   fi
 }
 
+## increment the version number based on the last tag.
+incremented_version()
+{
+  local major_version=`echo -e "${last_tag}" | sed "s/^\(.*\)\\.[0-9]\+\.[0-9]\+-alpha$/\1/"`
+  local minor_version=`echo -e "${last_tag}" | sed "s/^[0-9]\+\.\(.*\)\.[0-9]\+-alpha$/\1/"`
+  local patch_version=`echo -e "${last_tag}" | sed "s/^[0-9]\+\.[0-9]\+\.\(.*\)-alpha$/\1/"`
+
+
+  local new_patch_version=$((patch_version+1))
+  local new_version="$major_version.$minor_version.$new_patch_version-alpha"
+  echo $new_version
+}
+
+# The package.json contains PLACEHOLDERs we need to replace.
+# On deploy (so if this is a tagged build), we want to publish to npm as well.
+update_package_json()
+{
+  local package_json_path="${code}/package.json"
+
+  # Cut the "-alpha" from the version
+  local package_version=`echo -e "${INEXOR_VERSION}" | sed "s/^\(.*\)-alpha$/\1/"`
+
+  # Replace the version in the file.
+  sed -i -e "s/VERSION_PLACEHOLDER/${package_version}/g" "${package_json_path}"
+
+  local package_name_extension="linux64"
+
+  # Make the package name platform specific
+  sed -i -e "s/PLATFORM_PLACEHOLDER/${package_name_extension}/g" "${package_json_path}"
+}
+
+publish_to_npm()
+{
+  # Create a npmrc file containing our npm token
+  echo "@inexorgame:registry=https://registry.npmjs.org/
+//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+
+  update_package_json
+  npm pack
+  npm publish --access public
+}
+
+# increment version and create a tag on github.
+# (each time we push to master)
+create_tag() {
+  if test -n "$TRAVIS_TAG"; then
+    echo >&2 -e "===============\n" \
+      "Skipping tag creation, because this build\n" \
+      "got triggered by a tag.\n" \
+      "===============\n"
+  elif [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
+    # direct push to master
+
+    export new_version=$(incremented_version)
+
+    git config --global user.email "travis@travis-ci.org"
+    git config --global user.name "Travis"
+
+    git tag -a -m "automatic tag creation on push to master branch" "${new_version}"
+    git push -q https://$GITHUB_TOKEN@github.com/inexorgame/inexor-core --tags
+
+  else
+    echo >&2 -e "===============\n" \
+      "Skipping tag creation, because this is \n" \
+      "not a direct commit to master.\n" \
+      "===============\n"
+      export new_version=$(incremented_version)
+      echo >&2 -e $new_version
+  fi
+}
+
 
 # ACTUALLY COMPILING AND TESTING INEXOR ####################
 
 build() {
   (
-    mkcd "/tmp/inexor-build-${build}"
+    mkcd "/tmp/inexor-build"
 
     conan --version
 
@@ -126,85 +197,6 @@ nigthly_build() {
   local zipf="/tmp/${build}.zip"
   local descf="/tmp/${build}.txt"
 
-  # Include the media files
-  local media="${media}"
-  test -n "${media}" || test "$branch" = master && media=false
-
-  echo "
-  ---------------------------------------
-    Exporting Nightly build
-
-    commit: ${commit}
-    branch: ${branch}
-    job:    ${jobno}
-    build:  ${build}
-
-    gitroot: ${gitroot}
-    zip: ${zipf}
-    dir: ${outd}
-
-    data export: $media
-  "
-
-  mkdir "$outd"
-
-  #if test "$media" = true; then (
-    #cd "$gitroot"
-    #curl -LOk https://github.com/inexor-game/data/archive/master.zip
-    #unzip "master.zip" -d "$outd" 2>/dev/null
-    #rm "master.zip"
-    #cd "$outd"
-    #mv "data-master" "media/data"
-  #) fi
-
-  local ignore="$(<<< '
-    .
-    ..
-    build
-    cmake
-    CMakeLists.txt
-    Jenkinsfile
-    appveyor.yml
-    conanfile.py
-    conanfile.pyc
-    dependencies.py
-    dependencies.pyc
-    doxygen.conf
-    flex/.git
-    .git
-    .gitignore
-    .gitmodules
-    inexor
-    inexor.bat
-    media/core/.git
-    server.bat
-    tool
-    .travis.yml
-  ' tr -d " " | grep -v '^\s*$')"
-
-  (
-    cd "$gitroot"
-    ls -a | grep -Fivx "$ignore" | xargs -t cp -rt "$outd"
-  )
-
-  (
-    cd "`dirname "$outd"`"
-    zip -r -dd -q "$zipf" "`basename $outd`"
-  )
-
-  (
-    echo "Commit: ${commit}"
-    echo -n "SHA 512: "
-    sha512sum "$zipf"
-  ) > "$descf"
-
-  upload "$zipf" "$descf"
-
-  if test "$branch" = master; then (
-    echo "${build}" > "master-latest-$TARGET.txt"
-    upload "master-latest-$TARGET.zip" "master-latest-$TARGET.txt"
-  ) fi
-
   return 0
 }
 
@@ -229,9 +221,23 @@ target_after_success() {
   exit 0
 }
 
+# Upload nightly
+target_after_deploy() {
+  if test "$TARGET" != apidoc; then
+    if test -n "$TRAVIS_TAG"; then
+      if test "$CC" == "gcc"; then
+        publish_to_npm
+      fi
+    fi
+  fi
+  exit 0
+}
+
 target_script() {
   if test "$TARGET" = apidoc; then
     upload_apidoc
+  elif test "$TARGET" = new_version_tagger; then
+    create_tag
   else
     build
     run_tests
@@ -268,7 +274,7 @@ FTP_DOMAIN="${14}"
 
 # Name of this build
 export build="$(echo "${branch}-${jobno}" | sed 's#/#-#g')-${TARGET}"
-export main_repo="inexor-game/code"
+export main_repo="inexorgame/inexor-core"
 
 # Workaround Boost.Build problem to not be able to found Clang
 if [[ $CC == clang* ]]; then
@@ -302,4 +308,19 @@ self_pull_request && {
 }
 
 cd "$gitroot"
+
+# Tags do not get fetched from travis usually.
+git fetch origin 'refs/tags/*:refs/tags/*'
+export last_tag=`git describe --tags $(git rev-list --tags --max-count=1)`
+
+
+# The tag gets created on push to the master branch, then we push the tag to github and that push triggers travis.
+if test -n "$TRAVIS_TAG"; then
+  # We use the last tag as version for the package creation if this job got triggered by a tag-push.
+  export INEXOR_VERSION=${last_tag}
+else
+  # Otherwise we want a new version, not the last tag of the master branch, but the last one + 1.
+  export INEXOR_VERSION=$(incremented_version)
+fi
+
 "$@"  # Call the desired function

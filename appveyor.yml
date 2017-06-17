@@ -54,7 +54,9 @@ install:
   - cmd: cd %MAIN_FOLDER%
   - cmd: git submodule update --init --recursive
   - cmd: set VSVERSIONSHORT=%VSVERSION:~0,2%
-
+   # set INEXOR_VERSION (used in cmakes package creation process) based on the last tag found.
+  - cmd: if "%APPVEYOR_REPO_TAG%"=="true" ( set "INEXOR_VERSION=%APPVEYOR_REPO_TAG_NAME%" )
+  - cmd: if "%APPVEYOR_REPO_TAG%"=="false" ( set "INEXOR_VERSION=development" )
 
 # scripts to run before build
 before_build:
@@ -88,7 +90,7 @@ before_build:
   - cmd: if "%GLOBAL_NIGHTLY%"=="conan" ( conan install .. --scope build_all=1 --build -s compiler="Visual Studio" -s compiler.version=%VSVERSIONSHORT% -s compiler.runtime=%runtime_str% -s arch=%arch_str% -s build_type=%configuration% ) else ( conan install .. --scope build_all=1 --scope create_package=1 --build=missing -s compiler="Visual Studio" -s compiler.version=%VSVERSIONSHORT% -s compiler.runtime=%runtime_str% -s arch=%arch_str% -s build_type=%configuration% )
   - cmd: if "%GLOBAL_NIGHTLY%"=="conan" ( conan user --password "%CONAN_PASSWORD%" -r inexor "%CONAN_USER%" )
   - cmd: if "%GLOBAL_NIGHTLY%"=="conan" ( conan upload --all -r inexor --retry 3 --retry_wait 10 --confirm "*%CONAN_USER%*" )
-  - cmd: if "%GLOBAL_NIGHTLY%"=="true" ( cmake .. -G "%CMAKE_GENERATOR_NAME%" %args% -DCPACK_GENERATOR="7Z" ) else ( cmake .. -G "%CMAKE_GENERATOR_NAME%" %args% )
+  - cmd: if "%GLOBAL_NIGHTLY%"=="true" ( cmake .. -G "%CMAKE_GENERATOR_NAME%" %args% -DCPACK_GENERATOR="ZIP" ) else ( cmake .. -G "%CMAKE_GENERATOR_NAME%" %args% )
 #"NSIS;7Z"
 
 
@@ -99,7 +101,7 @@ build:
 
 artifacts:
   # pushing a single file
-  - path: build\Inexor-*.7z
+  - path: build\Inexor-*.zip
 #  - path: build\Inexor-*.exe
 
 deploy:
@@ -114,15 +116,37 @@ deploy:
     # push release binaries to GitHub if tag gets created (and create a release draft)
   - provider: GitHub
     auth_token:
-      secure: vIfb9LX3nWCSRefUqY4JJL3hSosnPgKAbmGejFBL+C9GtHJKSuPLU6aMCrR79hPM
-    draft: true
+      secure: mILffF4R/yXcj1hSZzZq1HoLe2aScWVuUpCYvkDqLKStI7JHiLt5yb7w2DPo+HF0
+    draft: false
     prerelease: true
+    # Override files if there are any already.
+    force_update: true
     on:
-      # release from master branch only
-      branch: master
-      # deploy on tag push only
+      # do only deploy on tag push
       appveyor_repo_tag: true
-      configuration: release
+      configuration: Release
+
+# Notify npm about the new release
+after_deploy:
+  - ps:|
+            if ($ENV:APPVEYOR_REPO_TAG  -eq "true" -and $ENV:CONFIGURATION  -eq "Release" )
+            {
+                $package_json = "C:\projects\inexor-game\package.json"
+
+
+                $package_version = $ENV:APPVEYOR_REPO_TAG_NAME -replace "-alpha"
+
+                (Get-Content $package_json) | ForEach-Object { $_ -replace "VERSION_PLACEHOLDER", $package_version } | Set-Content $package_json
+
+                $package_name_extension = "windows64"
+
+                (Get-Content $package_json) | ForEach-Object { $_ -replace "PLATFORM_PLACEHOLDER", $package_name_extension } | Set-Content $package_json
+
+                "@inexorgame:registry=https://registry.npmjs.org/`n//registry.npmjs.org/:_authToken=${NPM_TOKEN}" | Out-File (Join-Path $ENV:APPVEYOR_BUILD_FOLDER ".npmrc") -Encoding UTF8
+                iex "npm pack"
+                iex "npm publish --access public"
+}
+
 
 test_script:
   - C:\projects\inexor-game\%RELATIVE_PATH%build\bin\unit_tests.exe
