@@ -17,6 +17,8 @@
 # e.g. #CIDELETE this line is not visible in ci-prebuilds aka. won't get executed
 #
 
+language: cpp
+
 notifications:
   email:
     on_success: never
