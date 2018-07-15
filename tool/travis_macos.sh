@@ -59,7 +59,8 @@ build() {
 
     conan user -p "${CONAN_PASSWORD}" -r inexor "${CONAN_USER}"
 
-    rebuild_conan_and_upload "enet/1.3.13@bincrafters/stable"
+    rebuild_conan_and_upload "grpc/1.13.0@inexorgame/stable"
+    build_conan_and_upload "enet/1.3.13@bincrafters/stable"
     build_conan_and_upload "sdl2/2.0.8@bincrafters/testing"
     build_conan_and_upload "libpng/1.6.34@bincrafters/stable"
     build_conan_and_upload "libjpeg-turbo/1.5.2@bincrafters/stable"
@@ -74,7 +75,7 @@ build() {
     build_conan_and_upload "zlib/1.2.11@conan/stable"
 
     build_conan_and_upload "protobuf/3.5.1@bincrafters/stable"
-    build_conan_and_upload "gRPC/1.8.3@inexorgame/stable"
+
 
     build_conan_and_upload "Boost/1.66.0@conan/stable"
 
