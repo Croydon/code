@@ -5,6 +5,7 @@ include(cmake/get_conan_build_type.cmake)
 
 ### Different Configuration Types (Debug release)
 
+
 get_conan_build_type(BUILD_TYPE)
 message(STATUS "BUILD_TYPE: ${BUILD_TYPE}")
 
